@@ -163,7 +163,7 @@ export async function getEntryBySlug<T = Record<string, unknown>>(
 	if (collection) params.set('collection', collection)
 
 	const queryString = params.toString()
-	const endpoint = `/api/v1/${siteSlug}/entries/slug/${entrySlug}${queryString ? `?${queryString}` : ''}`
+	const endpoint = `/api/v1/${siteSlug}/entries/${entrySlug}${queryString ? `?${queryString}` : ''}`
 
 	const response = await fetchAPI<RushCMSResponse<RushCMSEntry<T>>>(endpoint, {
 		tags: [`entry-${entrySlug}`]
