@@ -9,12 +9,11 @@ interface ErrorProps {
 	reset: () => void
 }
 
-export default function Error({ error, reset }: ErrorProps) {
+export default function BlogError({ error, reset }: ErrorProps) {
 	useEffect(() => {
-		logger.error('application error', {
+		logger.error('blog listing error', {
 			message: error.message,
-			digest: error.digest,
-			stack: error.stack
+			digest: error.digest
 		})
 	}, [error])
 
@@ -40,10 +39,10 @@ export default function Error({ error, reset }: ErrorProps) {
 
 					<div>
 						<h2 className='text-xl sm:text-2xl font-bold text-gray-900 mb-2'>
-							Algo deu errado
+							Erro ao carregar o blog
 						</h2>
 						<p className='text-sm sm:text-base text-gray-600 max-w-md mx-auto'>
-							Ocorreu um erro inesperado. Por favor, tente novamente.
+							Não foi possível carregar a listagem de artigos. Por favor, tente novamente.
 						</p>
 					</div>
 

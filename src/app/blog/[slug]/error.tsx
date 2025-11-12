@@ -9,12 +9,11 @@ interface ErrorProps {
 	reset: () => void
 }
 
-export default function Error({ error, reset }: ErrorProps) {
+export default function BlogPostError({ error, reset }: ErrorProps) {
 	useEffect(() => {
-		logger.error('application error', {
+		logger.error('blog post error', {
 			message: error.message,
-			digest: error.digest,
-			stack: error.stack
+			digest: error.digest
 		})
 	}, [error])
 
@@ -40,10 +39,10 @@ export default function Error({ error, reset }: ErrorProps) {
 
 					<div>
 						<h2 className='text-xl sm:text-2xl font-bold text-gray-900 mb-2'>
-							Algo deu errado
+							Erro ao carregar o artigo
 						</h2>
 						<p className='text-sm sm:text-base text-gray-600 max-w-md mx-auto'>
-							Ocorreu um erro inesperado. Por favor, tente novamente.
+							Não foi possível carregar este artigo. Ele pode ter sido removido ou estar temporariamente indisponível.
 						</p>
 					</div>
 
@@ -62,6 +61,12 @@ export default function Error({ error, reset }: ErrorProps) {
 						>
 							Tentar Novamente
 						</button>
+						<Link
+							href='/blog'
+							className='inline-flex items-center justify-center px-6 py-3 text-base font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200'
+						>
+							Ver Todos os Artigos
+						</Link>
 						<Link
 							href='/'
 							className='inline-flex items-center justify-center px-6 py-3 text-base font-medium rounded-lg bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 transition-colors duration-200'

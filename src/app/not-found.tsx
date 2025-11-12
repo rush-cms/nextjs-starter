@@ -9,16 +9,36 @@ export default function NotFound() {
 					<h1 className='text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3'>
 						Página não encontrada
 					</h1>
-					<p className='text-base sm:text-lg text-gray-600 max-w-md mx-auto'>
+					<p className='text-base sm:text-lg text-gray-600 max-w-md mx-auto mb-6'>
 						A página que você está procurando não existe ou foi removida.
 					</p>
 				</div>
-				<Link
-					href='/'
-					className='inline-flex items-center justify-center px-6 py-3 text-base font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200'
-				>
-					Voltar para o Início
-				</Link>
+
+				<div className='flex flex-col sm:flex-row gap-3'>
+					<Link
+						href='/'
+						className='inline-flex items-center justify-center px-6 py-3 text-base font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200'
+					>
+						Voltar para o Início
+					</Link>
+					<Link
+						href='/blog'
+						className='inline-flex items-center justify-center px-6 py-3 text-base font-medium rounded-lg bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 transition-colors duration-200'
+					>
+						Ver Blog
+					</Link>
+				</div>
+
+				<div className='mt-8 text-sm text-gray-500'>
+					<p>Você também pode:</p>
+					<ul className='mt-2 space-y-1'>
+						<li>
+							<Link href='/contact' className='text-blue-600 hover:text-blue-800'>
+								Entrar em contato
+							</Link>
+						</li>
+					</ul>
+				</div>
 			</div>
 		</div>
 	)
