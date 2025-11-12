@@ -1,0 +1,79 @@
+{
+	"common": {
+		"home": "Home",
+		"blog": "Blog",
+		"pages": "Pages",
+		"readMore": "Read more",
+		"backToHome": "Back to home",
+		"backToBlog": "Back to blog",
+		"loading": "Loading...",
+		"error": "Error",
+		"notFound": "Not found",
+		"skipToContent": "Skip to main content"
+	},
+	"time": {
+		"now": "now",
+		"minutesAgo": "{minutes} minutes ago",
+		"hoursAgo": "{hours} hours ago",
+		"daysAgo": "{days} days ago",
+		"weeksAgo": "{weeks} weeks ago",
+		"monthsAgo": "{months} months ago",
+		"yearsAgo": "{years} years ago"
+	},
+	"boolean": {
+		"yes": "✓ Yes",
+		"no": "✗ No"
+	},
+	"form": {
+		"success": "Form submitted successfully!",
+		"error": "Error submitting form. Please try again.",
+		"required": "This field is required",
+		"invalidEmail": "Invalid email",
+		"submit": "Submit",
+		"sending": "Sending..."
+	},
+	"blog": {
+		"title": "Blog",
+		"noPosts": "No posts found",
+		"readingTime": "{minutes} min read",
+		"publishedOn": "Published on",
+		"author": "By {author}",
+		"tags": "Tags",
+		"relatedPosts": "Related posts",
+		"latestPosts": "Latest posts"
+	},
+	"search": {
+		"placeholder": "Search by title, content or tags...",
+		"resultsCount": "{count} results found",
+		"noResults": "No results found for your search"
+	},
+	"pagination": {
+		"previous": "Previous",
+		"next": "Next",
+		"page": "Page {page}",
+		"goToPage": "Go to page {page}"
+	},
+	"share": {
+		"title": "Share",
+		"twitter": "Share on Twitter",
+		"facebook": "Share on Facebook",
+		"linkedin": "Share on LinkedIn",
+		"email": "Share via email",
+		"copy": "Copy link",
+		"copied": "Link copied!"
+	},
+	"toc": {
+		"title": "On this page",
+		"toggleMenu": "Toggle menu"
+	},
+	"error": {
+		"title": "Something went wrong",
+		"description": "An unexpected error occurred. Please try again.",
+		"retry": "Try again",
+		"notFoundTitle": "Page not found",
+		"notFoundDescription": "The page you are looking for does not exist or has been moved.",
+		"serverError": "Server error",
+		"unauthorized": "Unauthorized",
+		"forbidden": "Access forbidden"
+	}
+}

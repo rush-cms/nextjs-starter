@@ -1,7 +1,10 @@
+'use client'
+
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 import type { RushCMSEntry } from '@/types/rush-cms'
 import { sanitizeHTML } from '@/lib/sanitize'
-import { BOOLEAN_LABELS, IMAGE_SIZES } from '@/lib/constants'
+import { IMAGE_SIZES } from '@/lib/constants'
 
 interface EntryRendererProps {
 	entry: RushCMSEntry<Record<string, unknown>>
@@ -14,6 +17,7 @@ interface FieldRendererProps {
 }
 
 function FieldRenderer({ name, value }: FieldRendererProps) {
+	const t = useTranslations('boolean')
 	if (value === null || value === undefined) {
 		return null
 	}
@@ -61,7 +65,7 @@ function FieldRenderer({ name, value }: FieldRendererProps) {
 						? 'bg-green-100 text-green-800'
 						: 'bg-gray-100 text-gray-800'
 				}`}>
-					{value ? BOOLEAN_LABELS.yes : BOOLEAN_LABELS.no}
+					{value ? t('yes') : t('no')}
 				</span>
 			</div>
 		)
