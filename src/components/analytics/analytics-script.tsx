@@ -9,33 +9,20 @@ interface AnalyticsScriptProps {
 	plausibleDomain?: string
 }
 
-declare global {
-	interface Window {
-		gtag?: (
-			command: string,
-			targetId: string,
-			config?: Record<string, unknown>
-		) => void
-		plausible?: (
-			event: string,
-			options?: { props?: Record<string, unknown> }
-		) => void
-	}
-}
-
 export function AnalyticsScript({
 	googleAnalyticsId,
 	plausibleDomain
 }: AnalyticsScriptProps) {
 	const pathname = usePathname()
 	const searchParams = useSearchParams()
+	const searchParamsString = searchParams?.toString()
 
 	useEffect(() => {
 		if (process.env.NODE_ENV !== 'production') {
 			return
 		}
 
-		const url = pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : '')
+		const url = pathname + (searchParamsString ? `?${searchParamsString}` : '')
 
 		if (googleAnalyticsId && window.gtag) {
 			window.gtag('config', googleAnalyticsId, {
@@ -46,7 +33,7 @@ export function AnalyticsScript({
 		if (plausibleDomain && window.plausible) {
 			window.plausible('pageview')
 		}
-	}, [pathname, searchParams, googleAnalyticsId, plausibleDomain])
+	}, [pathname, searchParamsString, googleAnalyticsId, plausibleDomain])
 
 	if (process.env.NODE_ENV !== 'production') {
 		return null

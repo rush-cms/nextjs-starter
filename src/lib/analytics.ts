@@ -1,17 +1,3 @@
-declare global {
-	interface Window {
-		gtag?: (
-			command: string,
-			targetId: string,
-			config?: Record<string, unknown>
-		) => void
-		plausible?: (
-			event: string,
-			options?: { props?: Record<string, unknown> }
-		) => void
-	}
-}
-
 export function trackPageview(url: string, title?: string) {
 	if (process.env.NODE_ENV !== 'production') {
 		console.log('[Analytics] Pageview (dev mode):', url, title)
