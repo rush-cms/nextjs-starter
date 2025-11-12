@@ -54,11 +54,20 @@ export function Article({ entry, showStructuredData = true, showBreadcrumbs = tr
 
 			{categories && categories.length > 0 && (
 				<div className='mb-3 sm:mb-4'>
-					{categories.map((category, index) => (
-						<span key={index} className='inline-block px-3 py-1 text-xs sm:text-sm font-medium bg-blue-100 text-blue-800 rounded-full mr-2'>
-							{category}
-						</span>
-					))}
+					{categories.map((category, index) => {
+						const categorySlug = typeof category === 'string' ? category.toLowerCase().replace(/\s+/g, '-') : category
+						const categoryName = typeof category === 'string' ? category : category
+
+						return (
+							<Link
+								key={index}
+								href={`/blog/tag/${categorySlug}`}
+								className='inline-block px-3 py-1 text-xs sm:text-sm font-medium bg-blue-100 hover:bg-blue-200 text-blue-800 rounded-full mr-2 transition-colors duration-200'
+							>
+								{categoryName}
+							</Link>
+						)
+					})}
 				</div>
 			)}
 
@@ -66,20 +75,24 @@ export function Article({ entry, showStructuredData = true, showBreadcrumbs = tr
 				{title}
 			</h1>
 
-			<div className='flex flex-wrap gap-2 sm:gap-4 text-sm text-gray-600 mb-6 sm:mb-8'>
-				<time dateTime={published_at} className='flex items-center gap-1'>
-					<span className='hidden sm:inline'>Publicado em</span>
-					<span className='sm:hidden'>📅</span>
-					{formatDate(published_at)}
-				</time>
-				{updated_at !== published_at && (
-					<span className='flex items-center gap-1'>
-						<span className='hidden sm:inline'>• Atualizado em</span>
-						<span className='sm:hidden'>🔄</span>
-						{formatDate(updated_at)}
-					</span>
-				)}
-			</div>
+			{(published_at || updated_at) && (
+				<div className='flex flex-wrap gap-2 sm:gap-4 text-sm text-gray-600 mb-6 sm:mb-8'>
+					{published_at && (
+						<time dateTime={published_at} className='flex items-center gap-1'>
+							<span className='hidden sm:inline'>Publicado em</span>
+							<span className='sm:hidden'>📅</span>
+							{formatDate(published_at)}
+						</time>
+					)}
+					{updated_at && updated_at !== published_at && (
+						<span className='flex items-center gap-1'>
+							<span className='hidden sm:inline'>• Atualizado em</span>
+							<span className='sm:hidden'>🔄</span>
+							{formatDate(updated_at)}
+						</span>
+					)}
+				</div>
+			)}
 
 
 			{excerpt && (
