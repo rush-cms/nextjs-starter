@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import type { RushCMSEntry } from '@/types/rush-cms'
 import { sanitizeHTML } from '@/lib/sanitize'
+import { BOOLEAN_LABELS, IMAGE_SIZES } from '@/lib/constants'
 
 interface EntryRendererProps {
 	entry: RushCMSEntry<Record<string, unknown>>
@@ -38,7 +39,7 @@ function FieldRenderer({ name, value }: FieldRendererProps) {
 							alt={name}
 							fill
 							className='object-cover'
-							sizes='(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px'
+							sizes={IMAGE_SIZES.FULL_WIDTH}
 						/>
 					</div>
 				</div>
@@ -60,7 +61,7 @@ function FieldRenderer({ name, value }: FieldRendererProps) {
 						? 'bg-green-100 text-green-800'
 						: 'bg-gray-100 text-gray-800'
 				}`}>
-					{value ? '✓ Sim' : '✗ Não'}
+					{value ? BOOLEAN_LABELS.yes : BOOLEAN_LABELS.no}
 				</span>
 			</div>
 		)
@@ -91,7 +92,7 @@ function FieldRenderer({ name, value }: FieldRendererProps) {
 										alt={`${name} ${index + 1}`}
 										fill
 										className='object-cover'
-										sizes='(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw'
+										sizes={IMAGE_SIZES.GRID_4_COL}
 									/>
 								</div>
 							))}
@@ -124,7 +125,7 @@ function FieldRenderer({ name, value }: FieldRendererProps) {
 							alt={imageObj.alt || name}
 							fill
 							className='object-cover'
-							sizes='(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px'
+							sizes={IMAGE_SIZES.FULL_WIDTH}
 						/>
 					</div>
 				</div>

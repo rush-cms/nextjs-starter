@@ -5,6 +5,7 @@ import { getNavigationItems } from '@/lib/rush-cms'
 import { Navigation } from '@/components/navigation'
 import { config } from '@/lib/config'
 import { AnalyticsScript } from '@/components/analytics/analytics-script'
+import { logger } from '@/lib/logger'
 
 const geistSans = Geist({
 	variable: '--font-geist-sans',
@@ -35,7 +36,7 @@ export default async function RootLayout({
 	try {
 		navigationItems = await getNavigationItems(config.site.slug, config.navigation.main)
 	} catch (error) {
-		console.error('Failed to fetch navigation:', error)
+		logger.error('Failed to fetch navigation', { error })
 	}
 
 	const googleAnalyticsId = process.env.NEXT_PUBLIC_GA_ID
@@ -46,12 +47,18 @@ export default async function RootLayout({
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white text-gray-900`}
 			>
+				<a
+					href='#main-content'
+					className='sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
+				>
+					Skip to main content
+				</a>
 				<AnalyticsScript
 					googleAnalyticsId={googleAnalyticsId}
 					plausibleDomain={plausibleDomain}
 				/>
 				<Navigation items={navigationItems} />
-				<main className='min-h-screen'>
+				<main id='main-content' className='min-h-screen'>
 					{children}
 				</main>
 				<footer className='bg-gray-900 text-white'>

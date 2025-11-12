@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
+import { FORM_MESSAGES } from '@/lib/constants'
 import {
 	Select,
 	SelectContent,
@@ -157,7 +158,7 @@ export function FormBuilder({ form, siteSlug, className = '' }: FormBuilderProps
 						</div>
 						<div className='flex-1'>
 							<h3 className='text-base sm:text-lg font-medium text-green-900 mb-1'>
-								Formulário enviado com sucesso!
+								{FORM_MESSAGES.success}
 							</h3>
 							<p className='text-sm sm:text-base text-green-700'>
 								Obrigado pelo contato. Retornaremos em breve.
