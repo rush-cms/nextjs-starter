@@ -1,28 +1,35 @@
+'use client'
+
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
 import { getEntries } from '@/lib/rush-cms'
 import { formatDate } from '@/lib/date'
 import { config } from '@/lib/config'
-import { generatePageMetadata } from '@/lib/metadata'
 import { BlogCard } from '@/components/blog-card'
+import { useSite } from '@/lib/site-context'
 import type { BlogEntry, BlogEntryData } from '@/types/rush-cms'
 
-export const metadata = generatePageMetadata({
-	title: `${config.site.name} - Modern Content Platform`,
-	description: 'Conteúdo moderno e dinâmico, powered by Rush CMS. Descubra nossos artigos e entre em contato.',
-	path: '/'
-})
+export default function HomePage() {
+	const { name: siteName } = useSite()
+	const [featuredEntries, setFeaturedEntries] = useState<BlogEntry[]>([])
+	const [loading, setLoading] = useState(true)
 
-export default async function HomePage() {
-	let featuredEntries: BlogEntry[] = []
+	useEffect(() => {
+		async function loadEntries() {
+			try {
+				const entries = await getEntries<BlogEntryData>(config.site.slug, config.collections.blog, {
+					status: 'published'
+				})
+				setFeaturedEntries(entries.slice(0, 3))
+			} catch (error) {
+				console.error('Failed to fetch featured entries:', error)
+			} finally {
+				setLoading(false)
+			}
+		}
 
-	try {
-		featuredEntries = await getEntries<BlogEntryData>(config.site.slug, config.collections.blog, {
-			status: 'published'
-		})
-		featuredEntries = featuredEntries.slice(0, 3)
-	} catch (error) {
-		console.error('Failed to fetch featured entries:', error)
-	}
+		loadEntries()
+	}, [])
 
 	return (
 		<div className='w-full'>
@@ -30,7 +37,7 @@ export default async function HomePage() {
 				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32'>
 					<div className='text-center max-w-3xl mx-auto'>
 						<h1 className='text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight'>
-							Bem-vindo ao {config.site.name}
+							Bem-vindo ao {siteName}
 						</h1>
 						<p className='text-lg sm:text-xl lg:text-2xl mb-8 text-blue-100'>
 							Conteúdo moderno e dinâmico, powered by Rush CMS

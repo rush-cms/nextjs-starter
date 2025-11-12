@@ -7,6 +7,7 @@ import type { RushCMSNavigationItem } from '@/types/rush-cms'
 
 interface NavigationProps {
 	items: RushCMSNavigationItem[]
+	siteName?: string
 	className?: string
 }
 
@@ -65,7 +66,7 @@ function NavigationItems({
 	)
 }
 
-export function Navigation({ items, className = '' }: NavigationProps) {
+export function Navigation({ items, siteName = 'Rush CMS', className = '' }: NavigationProps) {
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
 	return (
@@ -74,7 +75,7 @@ export function Navigation({ items, className = '' }: NavigationProps) {
 				<div className='flex items-center justify-between h-16'>
 					<div className='flex items-center'>
 						<Link href='/' className='text-xl sm:text-2xl font-bold text-gray-900'>
-							Rush CMS
+							{siteName}
 						</Link>
 					</div>
 
