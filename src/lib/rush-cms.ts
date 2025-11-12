@@ -91,6 +91,16 @@ export async function getTeams(): Promise<RushCMSSite[]> {
 	return response.data
 }
 
+export async function getSiteName(siteSlug: string, fallback: string): Promise<string> {
+	try {
+		const teams = await getTeams()
+		const currentTeam = teams.find(team => team.slug === siteSlug)
+		return currentTeam?.name || fallback
+	} catch (error) {
+		return fallback
+	}
+}
+
 export async function getCollections(siteSlug: string): Promise<RushCMSCollection[]> {
 	const response = await fetchAPI<RushCMSResponse<RushCMSCollection[]>>(
 		`/api/v1/${siteSlug}/collections`,
