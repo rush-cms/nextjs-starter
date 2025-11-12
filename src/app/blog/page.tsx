@@ -1,9 +1,9 @@
 import { getEntries } from '@/lib/rush-cms'
-import { formatDate } from '@/lib/date'
 import { config } from '@/lib/config'
 import { generatePageMetadata } from '@/lib/metadata'
-import { BlogCard } from '@/components/blog-card'
-import type { BlogEntry, BlogEntryData } from '@/types/rush-cms'
+import { BlogListing } from '@/components/blog/blog-listing'
+import { Breadcrumbs } from '@/components/breadcrumbs/breadcrumbs'
+import type { BlogEntryData } from '@/types/rush-cms'
 
 export const metadata = generatePageMetadata({
 	title: `Blog - ${config.site.name}`,
@@ -18,6 +18,8 @@ export default async function BlogPage() {
 
 	return (
 		<div className='w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16'>
+			<Breadcrumbs items={[{ label: 'Blog' }]} />
+
 			<div className='mb-8 sm:mb-12'>
 				<h1 className='text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 sm:mb-4'>
 					Blog
@@ -32,15 +34,7 @@ export default async function BlogPage() {
 					<p className='text-lg text-gray-600'>Nenhum artigo publicado ainda.</p>
 				</div>
 			) : (
-				<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8'>
-					{entries.map((entry) => (
-						<BlogCard
-							key={entry.id}
-							entry={entry}
-							formatDate={formatDate}
-						/>
-					))}
-				</div>
+				<BlogListing entries={entries} itemsPerPage={9} />
 			)}
 		</div>
 	)

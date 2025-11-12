@@ -3,15 +3,20 @@ import type { RushCMSEntry } from '@/types/rush-cms'
 import { sanitizeHTML } from '@/lib/sanitize'
 import { formatDate } from '@/lib/date'
 import { ArticleSchema, BreadcrumbSchema } from '@/components/structured-data/entry-schema'
+import { ShareButtons } from '@/components/share/share-buttons'
+import { Breadcrumbs } from '@/components/breadcrumbs/breadcrumbs'
+import { ArticleContent } from './article-content'
 import { config } from '@/lib/config'
 
 interface ArticleProps {
 	entry: RushCMSEntry<Record<string, unknown>>
 	showStructuredData?: boolean
+	showBreadcrumbs?: boolean
+	showToc?: boolean
 	basePath?: string
 }
 
-export function Article({ entry, showStructuredData = true, basePath = '/blog' }: ArticleProps) {
+export function Article({ entry, showStructuredData = true, showBreadcrumbs = true, showToc = true, basePath = '/blog' }: ArticleProps) {
 	const { data, published_at, updated_at } = entry
 	const category = data.category as { name: string, slug: string } | undefined
 	const featuredImage = data.featured_image as { url: string, alt?: string } | string | undefined
@@ -20,6 +25,8 @@ export function Article({ entry, showStructuredData = true, basePath = '/blog' }
 	const content = typeof data.content === 'string' ? data.content : undefined
 	const title = typeof data.title === 'string' ? data.title : ''
 	const author = typeof data.author === 'string' ? data.author : undefined
+
+	const currentUrl = `${config.site.url}${basePath}/${entry.slug}`
 
 	return (
 		<>
@@ -45,6 +52,15 @@ export function Article({ entry, showStructuredData = true, basePath = '/blog' }
 				</>
 			)}
 			<article className='w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12'>
+			{showBreadcrumbs && (
+				<Breadcrumbs
+					items={[
+						{ label: basePath.replace('/', '').charAt(0).toUpperCase() + basePath.slice(2), href: basePath },
+						{ label: title }
+					]}
+				/>
+			)}
+
 			{category && (
 				<div className='mb-3 sm:mb-4'>
 					<span className='inline-block px-3 py-1 text-xs sm:text-sm font-medium bg-blue-100 text-blue-800 rounded-full'>
@@ -86,15 +102,25 @@ export function Article({ entry, showStructuredData = true, basePath = '/blog' }
 			)}
 
 			{excerpt && (
-				<p className='text-base sm:text-lg text-gray-700 italic mb-6 sm:mb-8 pb-6 sm:pb-8 border-b border-gray-200'>
+				<p className='text-base sm:text-lg text-gray-700 italic mb-6 sm:mb-8'>
 					{excerpt}
 				</p>
 			)}
 
+			<div className='mb-6 sm:mb-8 pb-6 sm:pb-8 border-b border-gray-200'>
+				<ShareButtons
+					url={currentUrl}
+					title={title}
+					description={excerpt || title}
+					variant='default'
+					showLabels={false}
+				/>
+			</div>
+
 			{content && (
-				<div
-					className='prose prose-sm sm:prose-base lg:prose-lg max-w-none prose-headings:font-bold prose-headings:text-gray-900 prose-p:text-gray-700 prose-a:text-blue-600 hover:prose-a:text-blue-800 prose-img:rounded-lg prose-img:shadow-md'
-					dangerouslySetInnerHTML={{ __html: sanitizeHTML(content) }}
+				<ArticleContent
+					content={sanitizeHTML(content)}
+					showToc={showToc}
 				/>
 			)}
 
@@ -112,6 +138,16 @@ export function Article({ entry, showStructuredData = true, basePath = '/blog' }
 					))}
 				</div>
 			)}
+
+			<div className='mt-8 sm:mt-10 lg:mt-12 pt-6 sm:pt-8 border-t border-gray-200'>
+				<ShareButtons
+					url={currentUrl}
+					title={title}
+					description={excerpt || title}
+					variant='default'
+					showLabels={true}
+				/>
+			</div>
 		</article>
 		</>
 	)
