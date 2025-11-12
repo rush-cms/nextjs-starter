@@ -1,9 +1,7 @@
 import { getForm } from '@/lib/rush-cms'
 import { FormBuilder } from '@/components/rush/form-builder'
+import { config } from '@/lib/config'
 import type { Metadata } from 'next'
-
-const SITE_SLUG = process.env.SITE_SLUG || 'default'
-const CONTACT_FORM_KEY = process.env.CONTACT_FORM_KEY || 'contact'
 
 export const metadata: Metadata = {
 	title: 'Contato',
@@ -14,7 +12,7 @@ export default async function ContactPage() {
 	let form
 
 	try {
-		form = await getForm(SITE_SLUG, CONTACT_FORM_KEY)
+		form = await getForm(config.site.slug, config.forms.contact)
 	} catch (error) {
 		console.error('Failed to fetch form:', error)
 	}
@@ -37,7 +35,7 @@ export default async function ContactPage() {
 					</p>
 				</div>
 			) : (
-				<FormBuilder form={form} siteSlug={SITE_SLUG} />
+				<FormBuilder form={form} siteSlug={config.site.slug} />
 			)}
 		</div>
 	)

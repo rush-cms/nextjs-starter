@@ -1,18 +1,10 @@
 import Image from 'next/image'
 import type { RushCMSEntry } from '@/types/rush-cms'
 import { sanitizeHTML } from '@/lib/sanitize'
+import { formatDate } from '@/lib/date'
 
 interface ArticleProps {
 	entry: RushCMSEntry
-}
-
-function formatDate(dateString: string): string {
-	const date = new Date(dateString)
-	return date.toLocaleDateString('pt-BR', {
-		year: 'numeric',
-		month: 'long',
-		day: 'numeric'
-	})
 }
 
 export function Article({ entry }: ArticleProps) {

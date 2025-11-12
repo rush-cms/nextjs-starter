@@ -1,10 +1,9 @@
 import { notFound } from 'next/navigation'
 import { getEntryBySlug } from '@/lib/rush-cms'
 import { EntryRenderer } from '@/components/rush/entry-renderer'
+import { config } from '@/lib/config'
 import type { RushCMSEntry } from '@/types/rush-cms'
 import type { Metadata } from 'next'
-
-const SITE_SLUG = process.env.SITE_SLUG || 'default'
 
 interface DynamicPageProps {
 	params: Promise<{
@@ -18,7 +17,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: DynamicPageProps): Promise<Metadata> {
 	const { slug } = await params
-	const entry = await getEntryBySlug(SITE_SLUG, slug)
+	const entry = await getEntryBySlug(config.site.slug, slug)
 
 	if (!entry) {
 		return {
@@ -42,7 +41,7 @@ export async function generateMetadata({ params }: DynamicPageProps): Promise<Me
 
 export default async function DynamicPage({ params }: DynamicPageProps) {
 	const { slug } = await params
-	const entry = await getEntryBySlug(SITE_SLUG, slug)
+	const entry = await getEntryBySlug(config.site.slug, slug)
 
 	if (!entry) {
 		notFound()

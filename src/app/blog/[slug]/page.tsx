@@ -1,11 +1,9 @@
 import { notFound } from 'next/navigation'
 import { getEntryBySlug, getEntries } from '@/lib/rush-cms'
 import { Article } from '@/components/rush/article'
-import type { RushCMSEntry } from '@/types/rush-cms'
+import { config } from '@/lib/config'
+import type { RushCMSEntry, BlogEntry, BlogEntryData } from '@/types/rush-cms'
 import type { Metadata } from 'next'
-
-const SITE_SLUG = process.env.SITE_SLUG || 'default'
-const BLOG_COLLECTION_ID = parseInt(process.env.BLOG_COLLECTION_ID || '1')
 
 interface BlogPostPageProps {
 	params: Promise<{
@@ -13,15 +11,8 @@ interface BlogPostPageProps {
 	}>
 }
 
-interface BlogEntry {
-	title: string
-	excerpt?: string
-	content?: string
-	featured_image?: string | { url: string, alt?: string }
-}
-
 export async function generateStaticParams() {
-	const entries = await getEntries(SITE_SLUG, BLOG_COLLECTION_ID, {
+	const entries = await getEntries(config.site.slug, config.collections.blog, {
 		status: 'published'
 	})
 
@@ -32,7 +23,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
 	const { slug } = await params
-	const entry = await getEntryBySlug<BlogEntry>(SITE_SLUG, slug)
+	const entry = await getEntryBySlug<BlogEntryData>(config.site.slug, slug)
 
 	if (!entry) {
 		return {
@@ -61,7 +52,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
 	const { slug } = await params
-	const entry = await getEntryBySlug<BlogEntry>(SITE_SLUG, slug)
+	const entry = await getEntryBySlug<BlogEntryData>(config.site.slug, slug)
 
 	if (!entry) {
 		notFound()

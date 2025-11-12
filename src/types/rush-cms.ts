@@ -211,3 +211,17 @@ export interface FetchAPIOptions {
 	revalidate?: number
 	tags?: string[]
 }
+
+// Blog Entry Types
+export interface BlogEntryData {
+	title: string
+	excerpt?: string
+	content?: string
+	featured_image?: string | { url: string, alt?: string }
+	category?: { name: string, slug: string }
+	tags?: Array<{ name: string, slug: string }>
+}
+
+export type BlogEntry = RushCMSEntry<BlogEntryData>
+export type AnyEntry = RushCMSEntry<Record<string, unknown>>
+
