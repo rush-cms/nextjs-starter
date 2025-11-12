@@ -29,47 +29,59 @@ function NavigationItems({
 		return pathname.startsWith(url)
 	}
 
-	const renderItem = (item: RushCMSNavigationItem, depth = 0) => {
-		const active = isActive(item.url)
-		const hasChildren = item.children && item.children.length > 0
-
-		return (
-			<>
-				<Link
-					href={item.url}
-					target={item.target || '_self'}
-					onClick={onItemClick}
-					className={`
-						block px-4 py-2 rounded-md transition-colors duration-200
-						${mobile ? 'text-base' : 'text-sm'}
-						${active
-							? 'bg-blue-600 text-white font-medium'
-							: 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
-						}
-					`}
-				>
-					{item.title}
-				</Link>
-				{hasChildren && (
-					<ul className='mt-1 space-y-1'>
-						{item.children?.map(child => (
-							<li key={child.id} className={depth > 0 ? 'ml-4' : ''}>
-								{renderItem(child, depth + 1)}
-							</li>
-						))}
-					</ul>
-				)}
-			</>
-		)
-	}
-
 	return (
 		<ul className={mobile ? 'space-y-1' : 'flex items-center gap-2'}>
-			{items.map(item => (
-				<li key={item.id}>
-					{renderItem(item)}
-				</li>
-			))}
+			{items.map(item => {
+				const active = isActive(item.url)
+				const hasChildren = item.children && item.children.length > 0
+
+				return (
+					<li key={item.id}>
+						<Link
+							href={item.url}
+							target={item.target || '_self'}
+							onClick={onItemClick}
+							className={`
+								block px-4 py-2 rounded-md transition-colors duration-200
+								${mobile ? 'text-base' : 'text-sm'}
+								${active
+									? 'bg-blue-600 text-white font-medium'
+									: 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+								}
+							`}
+						>
+							{item.title}
+						</Link>
+						{hasChildren && (
+							<ul className='mt-1 space-y-1'>
+								{item.children?.map(child => {
+									const childActive = isActive(child.url)
+
+									return (
+										<li key={child.id} className='ml-4'>
+											<Link
+												href={child.url}
+												target={child.target || '_self'}
+												onClick={onItemClick}
+												className={`
+													block px-4 py-2 rounded-md transition-colors duration-200
+													${mobile ? 'text-base' : 'text-sm'}
+													${childActive
+														? 'bg-blue-600 text-white font-medium'
+														: 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+													}
+												`}
+											>
+												{child.title}
+											</Link>
+										</li>
+									)
+								})}
+							</ul>
+						)}
+					</li>
+				)
+			})}
 		</ul>
 	)
 }
