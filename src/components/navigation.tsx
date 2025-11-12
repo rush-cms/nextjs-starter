@@ -10,7 +10,15 @@ interface NavigationProps {
 	className?: string
 }
 
-function NavigationItems({ items, mobile = false }: { items: RushCMSNavigationItem[], mobile?: boolean }) {
+function NavigationItems({
+	items,
+	mobile = false,
+	onItemClick
+}: {
+	items: RushCMSNavigationItem[]
+	mobile?: boolean
+	onItemClick?: () => void
+}) {
 	const pathname = usePathname()
 
 	const isActive = (url: string) => {
@@ -29,6 +37,7 @@ function NavigationItems({ items, mobile = false }: { items: RushCMSNavigationIt
 				<Link
 					href={item.url}
 					target={item.target || '_self'}
+					onClick={onItemClick}
 					className={`
 						block px-4 py-2 rounded-md transition-colors duration-200
 						${mobile ? 'text-base' : 'text-sm'}
@@ -108,7 +117,11 @@ export function Navigation({ items, className = '' }: NavigationProps) {
 			{mobileMenuOpen && (
 				<div className='md:hidden border-t border-gray-200'>
 					<div className='px-2 pt-2 pb-3 space-y-1'>
-						<NavigationItems items={items} mobile />
+						<NavigationItems
+							items={items}
+							mobile
+							onItemClick={() => setMobileMenuOpen(false)}
+						/>
 					</div>
 				</div>
 			)}
