@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { sanitizeHTML } from '@/lib/sanitize'
 
 interface Block {
 	type: string
@@ -130,7 +131,7 @@ function ParagraphBlock({ data }: { data: Record<string, unknown> }) {
 	return (
 		<div
 			className='my-4 sm:my-6 prose prose-sm sm:prose-base max-w-none'
-			dangerouslySetInnerHTML={{ __html: text }}
+			dangerouslySetInnerHTML={{ __html: sanitizeHTML(text) }}
 		/>
 	)
 }

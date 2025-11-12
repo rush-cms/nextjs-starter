@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import type { RushCMSEntry } from '@/types/rush-cms'
+import { sanitizeHTML } from '@/lib/sanitize'
 
 interface EntryRendererProps {
 	entry: RushCMSEntry
@@ -22,7 +23,7 @@ function FieldRenderer({ name, value }: FieldRendererProps) {
 				<div className='mb-4 sm:mb-6'>
 					<div
 						className='prose prose-sm sm:prose-base max-w-none'
-						dangerouslySetInnerHTML={{ __html: value }}
+						dangerouslySetInnerHTML={{ __html: sanitizeHTML(value) }}
 					/>
 				</div>
 			)

@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import type { RushCMSEntry } from '@/types/rush-cms'
+import { sanitizeHTML } from '@/lib/sanitize'
 
 interface ArticleProps {
 	entry: RushCMSEntry
@@ -74,7 +75,7 @@ export function Article({ entry }: ArticleProps) {
 			{content && (
 				<div
 					className='prose prose-sm sm:prose-base lg:prose-lg max-w-none prose-headings:font-bold prose-headings:text-gray-900 prose-p:text-gray-700 prose-a:text-blue-600 hover:prose-a:text-blue-800 prose-img:rounded-lg prose-img:shadow-md'
-					dangerouslySetInnerHTML={{ __html: content }}
+					dangerouslySetInnerHTML={{ __html: sanitizeHTML(content) }}
 				/>
 			)}
 
