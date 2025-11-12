@@ -1,14 +1,13 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
-import { NextIntlClientProvider } from 'next-intl'
-import { getMessages, getTranslations } from 'next-intl/server'
 import './globals.css'
 import '@/lib/suppress-dev-errors'
-import { getNavigationItems } from '@/lib/rush-cms'
+import { getNavigationItems, getTeams } from '@/lib/rush-cms'
 import { Navigation } from '@/components/navigation'
 import { config } from '@/lib/config'
 import { AnalyticsScript } from '@/components/analytics/analytics-script'
 import { logger } from '@/lib/logger'
+import { messages } from '@/lib/i18n/messages'
 
 const geistSans = Geist({
 	variable: '--font-geist-sans',
@@ -35,9 +34,19 @@ export default async function RootLayout({
 	children: React.ReactNode
 }>) {
 	const locale = config.site.locale
-	const messages = await getMessages({ locale })
-	const t = await getTranslations({ locale, namespace: 'common' })
 	let navigationItems: Awaited<ReturnType<typeof getNavigationItems>> = []
+	let siteName = config.site.name
+
+	try {
+		const teams = await getTeams()
+		const currentTeam = teams.find(team => team.slug === config.site.slug)
+
+		if (currentTeam) {
+			siteName = currentTeam.name
+		}
+	} catch (error) {
+		logger.error('Failed to fetch team info', { error })
+	}
 
 	try {
 		navigationItems = await getNavigationItems(config.site.slug, config.navigation.main)
@@ -53,34 +62,32 @@ export default async function RootLayout({
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white text-gray-900`}
 			>
-				<NextIntlClientProvider messages={messages} locale={locale}>
-					<a
-						href='#main-content'
-						className='sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
-					>
-						{t('skipToContent')}
-					</a>
-					<AnalyticsScript
-						googleAnalyticsId={googleAnalyticsId}
-						plausibleDomain={plausibleDomain}
-					/>
-					<Navigation items={navigationItems} />
-					<main id='main-content' className='min-h-screen'>
-						{children}
-					</main>
-					<footer className='bg-gray-900 text-white'>
-						<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12'>
-							<div className='text-center'>
-								<p className='text-sm sm:text-base text-gray-400'>
-									© {new Date().getFullYear()} {config.site.name}. Todos os direitos reservados.
-								</p>
-								<p className='text-xs sm:text-sm text-gray-500 mt-2'>
-									Powered by <a href='https://rushcms.com' target='_blank' rel='noopener noreferrer' className='text-blue-400 hover:text-blue-300 transition-colors'>Rush CMS</a>
-								</p>
-							</div>
+				<a
+					href='#main-content'
+					className='sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
+				>
+					{messages.common.skipToContent}
+				</a>
+				<AnalyticsScript
+					googleAnalyticsId={googleAnalyticsId}
+					plausibleDomain={plausibleDomain}
+				/>
+				<Navigation items={navigationItems} />
+				<main id='main-content' className='min-h-screen'>
+					{children}
+				</main>
+				<footer className='bg-gray-900 text-white'>
+					<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12'>
+						<div className='text-center'>
+							<p className='text-sm sm:text-base text-gray-400'>
+								© {new Date().getFullYear()} {siteName}. Todos os direitos reservados.
+							</p>
+							<p className='text-xs sm:text-sm text-gray-500 mt-2'>
+								Powered by <a href='https://rushcms.com' target='_blank' rel='noopener noreferrer' className='text-blue-400 hover:text-blue-300 transition-colors'>Rush CMS</a>
+							</p>
 						</div>
-					</footer>
-				</NextIntlClientProvider>
+					</div>
+				</footer>
 			</body>
 		</html>
 	)
