@@ -213,7 +213,7 @@ export interface FetchAPIOptions {
 }
 
 // Blog Entry Types
-export interface BlogEntryData {
+export interface BlogEntryData extends Record<string, unknown> {
 	title: string
 	excerpt?: string
 	content?: string

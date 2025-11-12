@@ -3,7 +3,7 @@ import type { RushCMSEntry } from '@/types/rush-cms'
 import { sanitizeHTML } from '@/lib/sanitize'
 
 interface EntryRendererProps {
-	entry: RushCMSEntry
+	entry: RushCMSEntry<Record<string, unknown>>
 	className?: string
 }
 

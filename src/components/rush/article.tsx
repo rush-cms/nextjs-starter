@@ -4,7 +4,7 @@ import { sanitizeHTML } from '@/lib/sanitize'
 import { formatDate } from '@/lib/date'
 
 interface ArticleProps {
-	entry: RushCMSEntry
+	entry: RushCMSEntry<Record<string, unknown>>
 }
 
 export function Article({ entry }: ArticleProps) {

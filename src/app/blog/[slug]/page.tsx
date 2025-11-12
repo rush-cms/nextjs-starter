@@ -58,5 +58,5 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 		notFound()
 	}
 
-	return <Article entry={entry as unknown as RushCMSEntry} />
+	return <Article entry={entry} />
 }

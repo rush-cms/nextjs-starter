@@ -3,13 +3,13 @@ import { getEntries } from '@/lib/rush-cms'
 import { formatDate } from '@/lib/date'
 import { config } from '@/lib/config'
 import { BlogCard } from '@/components/blog-card'
-import type { BlogEntry } from '@/types/rush-cms'
+import type { BlogEntry, BlogEntryData } from '@/types/rush-cms'
 
 export default async function HomePage() {
 	let featuredEntries: BlogEntry[] = []
 
 	try {
-		featuredEntries = await getEntries<BlogEntry>(config.site.slug, config.collections.blog, {
+		featuredEntries = await getEntries<BlogEntryData>(config.site.slug, config.collections.blog, {
 			status: 'published'
 		})
 		featuredEntries = featuredEntries.slice(0, 3)
