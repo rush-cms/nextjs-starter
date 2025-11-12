@@ -1,4 +1,8 @@
 function validateEnv() {
+	if (typeof window !== 'undefined') {
+		return
+	}
+
 	if (process.env.NEXT_PUBLIC_API_TOKEN) {
 		throw new Error(
 			'⚠️  SECURITY ERROR: API_TOKEN must not use NEXT_PUBLIC_ prefix! ' +

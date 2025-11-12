@@ -34,7 +34,7 @@ function NavigationItems({
 		const hasChildren = item.children && item.children.length > 0
 
 		return (
-			<li key={item.id} className={depth > 0 ? 'ml-4' : ''}>
+			<>
 				<Link
 					href={item.url}
 					target={item.target || '_self'}
@@ -52,16 +52,24 @@ function NavigationItems({
 				</Link>
 				{hasChildren && (
 					<ul className='mt-1 space-y-1'>
-						{item.children?.map(child => renderItem(child, depth + 1))}
+						{item.children?.map(child => (
+							<li key={child.id} className={depth > 0 ? 'ml-4' : ''}>
+								{renderItem(child, depth + 1)}
+							</li>
+						))}
 					</ul>
 				)}
-			</li>
+			</>
 		)
 	}
 
 	return (
 		<ul className={mobile ? 'space-y-1' : 'flex items-center gap-2'}>
-			{items.map(item => renderItem(item))}
+			{items.map(item => (
+				<li key={item.id}>
+					{renderItem(item)}
+				</li>
+			))}
 		</ul>
 	)
 }
