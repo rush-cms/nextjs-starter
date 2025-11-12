@@ -39,10 +39,10 @@ export default function BlogPostError({ error, reset }: ErrorProps) {
 
 					<div>
 						<h2 className='text-xl sm:text-2xl font-bold text-gray-900 mb-2'>
-							Erro ao carregar o artigo
+							Erro ao carregar o conteúdo
 						</h2>
 						<p className='text-sm sm:text-base text-gray-600 max-w-md mx-auto'>
-							Não foi possível carregar este artigo. Ele pode ter sido removido ou estar temporariamente indisponível.
+							Não foi possível carregar este conteúdo. Ele pode ter sido removido ou estar temporariamente indisponível.
 						</p>
 					</div>
 
@@ -65,7 +65,7 @@ export default function BlogPostError({ error, reset }: ErrorProps) {
 							href='/blog'
 							className='inline-flex items-center justify-center px-6 py-3 text-base font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200'
 						>
-							Ver Todos os Artigos
+							Ver Todos os Conteúdos
 						</Link>
 						<Link
 							href='/'

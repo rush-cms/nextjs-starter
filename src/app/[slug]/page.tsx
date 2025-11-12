@@ -17,7 +17,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: DynamicPageProps): Promise<Metadata> {
 	const { slug } = await params
-	const entry = await getEntryBySlug(config.site.slug, slug)
+	const entry = await getEntryBySlug(config.site.slug, slug, config.collections.pages)
 
 	if (!entry) {
 		return {
@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: DynamicPageProps): Promise<Me
 
 export default async function DynamicPage({ params }: DynamicPageProps) {
 	const { slug } = await params
-	const entry = await getEntryBySlug(config.site.slug, slug)
+	const entry = await getEntryBySlug(config.site.slug, slug, config.collections.pages)
 
 	if (!entry) {
 		notFound()

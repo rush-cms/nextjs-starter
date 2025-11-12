@@ -24,7 +24,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
 	const { slug } = await params
-	const entry = await getEntryBySlug<BlogEntryData>(config.site.slug, slug)
+	const entry = await getEntryBySlug<BlogEntryData>(config.site.slug, slug, config.collections.blog)
 
 	if (!entry) {
 		return {
@@ -36,23 +36,16 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 		entry,
 		path: `/blog/${entry.slug}`,
 		type: 'article',
-		getTitleFn: (data) => data.title,
-		getDescriptionFn: (data) => data.excerpt || data.title,
-		getImageFn: (data): string | undefined => {
-			const img = data.featured_image
-			if (typeof img === 'string') return img
-			if (img && typeof img === 'object' && 'url' in img) {
-				return typeof img.url === 'string' ? img.url : undefined
-			}
-			return undefined
-		},
-		getAuthorFn: (data): string | undefined => data.author
+		getTitleFn: () => entry.title,
+		getDescriptionFn: () => entry.excerpt || entry.title,
+		getImageFn: (): string | undefined => undefined,
+		getAuthorFn: (): string | undefined => entry.author?.name || undefined
 	})
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
 	const { slug } = await params
-	const entry = await getEntryBySlug<BlogEntryData>(config.site.slug, slug)
+	const entry = await getEntryBySlug<BlogEntryData>(config.site.slug, slug, config.collections.blog)
 
 	if (!entry) {
 		notFound()
