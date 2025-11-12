@@ -157,19 +157,15 @@ export async function getEntries<T = Record<string, unknown>>(
 export async function getEntryBySlug<T = Record<string, unknown>>(
 	siteSlug: string,
 	entrySlug: string,
-	collection?: string
+	collectionId: number
 ): Promise<RushCMSEntry<T>> {
-	const params = new URLSearchParams()
-	if (collection) params.set('collection', collection)
+	const endpoint = `/api/v1/${siteSlug}/collections/${collectionId}/entries/${entrySlug}`
 
-	const queryString = params.toString()
-	const endpoint = `/api/v1/${siteSlug}/entries/${entrySlug}${queryString ? `?${queryString}` : ''}`
-
-	const response = await fetchAPI<RushCMSResponse<RushCMSEntry<T>>>(endpoint, {
+	const response = await fetchAPI<RushCMSEntry<T>>(endpoint, {
 		tags: [`entry-${entrySlug}`]
 	})
 
-	return response.data
+	return response
 }
 
 export async function getNavigations(siteSlug: string): Promise<RushCMSNavigation[]> {

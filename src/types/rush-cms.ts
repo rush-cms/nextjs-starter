@@ -214,13 +214,9 @@ export interface FetchAPIOptions {
 
 // Blog Entry Types
 export interface BlogEntryData extends Record<string, unknown> {
-	title: string
-	excerpt?: string
-	content?: string
-	author?: string
-	featured_image?: string | { url: string, alt?: string }
-	category?: { name: string, slug: string }
-	tags?: Array<{ name: string, slug: string }>
+	content?: Array<{ type: string, data: Record<string, unknown> }>
+	categories?: string[]
+	tags?: string[]
 }
 
 export type BlogEntry = RushCMSEntry<BlogEntryData>

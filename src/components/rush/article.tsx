@@ -1,11 +1,8 @@
-import Image from 'next/image'
 import type { RushCMSEntry } from '@/types/rush-cms'
-import { sanitizeHTML } from '@/lib/sanitize'
 import { formatDate } from '@/lib/date'
 import { ArticleSchema, BreadcrumbSchema } from '@/components/structured-data/entry-schema'
 import { ShareButtons } from '@/components/share/share-buttons'
 import { Breadcrumbs } from '@/components/breadcrumbs/breadcrumbs'
-import { ArticleContent } from './article-content'
 import { config } from '@/lib/config'
 
 interface ArticleProps {
@@ -17,14 +14,10 @@ interface ArticleProps {
 }
 
 export function Article({ entry, showStructuredData = true, showBreadcrumbs = true, showToc = true, basePath = '/blog' }: ArticleProps) {
-	const { data, published_at, updated_at } = entry
-	const category = data.category as { name: string, slug: string } | undefined
-	const featuredImage = data.featured_image as { url: string, alt?: string } | string | undefined
-	const tags = data.tags as Array<{ name: string, slug: string }> | undefined
-	const excerpt = typeof data.excerpt === 'string' ? data.excerpt : undefined
-	const content = typeof data.content === 'string' ? data.content : undefined
-	const title = typeof data.title === 'string' ? data.title : ''
-	const author = typeof data.author === 'string' ? data.author : undefined
+	const { data, published_at, updated_at, title, excerpt, author } = entry
+	const categories = data.categories as string[] | undefined
+	const tags = data.tags as string[] | undefined
+	const content = data.content as Array<{ type: string, data: Record<string, unknown> }> | undefined
 
 	const currentUrl = `${config.site.url}${basePath}/${entry.slug}`
 
@@ -34,13 +27,10 @@ export function Article({ entry, showStructuredData = true, showBreadcrumbs = tr
 				<>
 					<ArticleSchema
 						entry={entry}
-						getTitleFn={(data) => (data.title as string) || 'Untitled'}
-						getDescriptionFn={(data) => (data.excerpt as string) || ''}
-						getImageFn={(data) => {
-							const img = data.featured_image
-							return typeof img === 'string' ? img : (img as { url?: string })?.url
-						}}
-						getAuthorFn={(data) => data.author as string | undefined}
+						getTitleFn={() => entry.title || 'Untitled'}
+						getDescriptionFn={() => entry.excerpt || ''}
+						getImageFn={() => undefined}
+						getAuthorFn={() => entry.author?.name}
 					/>
 					<BreadcrumbSchema
 						items={[
@@ -61,11 +51,13 @@ export function Article({ entry, showStructuredData = true, showBreadcrumbs = tr
 				/>
 			)}
 
-			{category && (
+			{categories && categories.length > 0 && (
 				<div className='mb-3 sm:mb-4'>
-					<span className='inline-block px-3 py-1 text-xs sm:text-sm font-medium bg-blue-100 text-blue-800 rounded-full'>
-						{category.name}
-					</span>
+					{categories.map((category, index) => (
+						<span key={index} className='inline-block px-3 py-1 text-xs sm:text-sm font-medium bg-blue-100 text-blue-800 rounded-full mr-2'>
+							{category}
+						</span>
+					))}
 				</div>
 			)}
 
@@ -88,18 +80,6 @@ export function Article({ entry, showStructuredData = true, showBreadcrumbs = tr
 				)}
 			</div>
 
-			{featuredImage && (
-				<div className='relative w-full h-48 sm:h-64 md:h-80 lg:h-96 mb-6 sm:mb-8 lg:mb-10 rounded-lg overflow-hidden bg-gray-100'>
-					<Image
-						src={typeof featuredImage === 'string' ? featuredImage : featuredImage.url}
-						alt={typeof featuredImage === 'object' && featuredImage.alt ? featuredImage.alt : title}
-						fill
-						className='object-cover'
-						priority
-						sizes='(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px'
-					/>
-				</div>
-			)}
 
 			{excerpt && (
 				<p className='text-base sm:text-lg text-gray-700 italic mb-6 sm:mb-8'>
@@ -117,24 +97,44 @@ export function Article({ entry, showStructuredData = true, showBreadcrumbs = tr
 				/>
 			</div>
 
-			{content && (
-				<ArticleContent
-					content={sanitizeHTML(content)}
-					showToc={showToc}
-				/>
+			{content && content.length > 0 && (
+				<div className='prose prose-slate max-w-none mb-8'>
+					{content.map((block, index) => {
+						if (block.type === 'richtext' && block.data.content) {
+							const richtextContent = block.data.content as { type: string, content?: unknown[] }
+							if (richtextContent.content && Array.isArray(richtextContent.content)) {
+								return (
+									<div key={index}>
+										{richtextContent.content.map((node: unknown, nodeIndex: number) => {
+											const typedNode = node as { type?: string, content?: Array<{ type?: string, text?: string }> }
+											if (typedNode.type === 'paragraph' && typedNode.content) {
+												return (
+													<p key={nodeIndex}>
+														{typedNode.content.map((textNode, textIndex) => textNode.text || '').join('')}
+													</p>
+												)
+											}
+											return null
+										})}
+									</div>
+								)
+							}
+						}
+						return null
+					})}
+				</div>
 			)}
 
 			{tags && tags.length > 0 && (
 				<div className='flex flex-wrap gap-2 mt-8 sm:mt-10 lg:mt-12 pt-6 sm:pt-8 border-t border-gray-200'>
 					<span className='text-sm font-medium text-gray-900 mr-2'>Tags:</span>
-					{tags.map((tag) => (
-						<a
-							key={tag.slug}
-							href={`/blog/tag/${tag.slug}`}
-							className='px-3 py-1 text-xs sm:text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full transition-colors duration-200'
+					{tags.map((tag, index) => (
+						<span
+							key={index}
+							className='px-3 py-1 text-xs sm:text-sm bg-gray-100 text-gray-700 rounded-full'
 						>
-							#{tag.name}
-						</a>
+							#{tag}
+						</span>
 					))}
 				</div>
 			)}
