@@ -4,17 +4,33 @@ A modern, production-ready Next.js 16 starter template for [Rush CMS](https://ru
 
 ## Features
 
+### Core Features
 - ✅ **Next.js 16 App Router** - Server Components, ISR, and streaming
 - ✅ **TypeScript** - Full type safety with strict mode
 - ✅ **Tailwind CSS** - Utility-first styling
 - ✅ **Mobile-First** - Responsive design patterns
-- ✅ **SEO Optimized** - Dynamic sitemap, robots.txt, Open Graph
+- ✅ **SEO Optimized** - Dynamic sitemap, robots.txt, Open Graph, JSON-LD
 - ✅ **Analytics Ready** - Google Analytics & Plausible support
 - ✅ **On-Demand Revalidation** - Webhook-based cache invalidation
 - ✅ **Form Builder** - Dynamic forms from Rush CMS
 - ✅ **Block Editor** - Rich content rendering (YouTube, Gallery, Quotes, etc.)
 - ✅ **Error Boundaries** - Graceful error handling with recovery
 - ✅ **Loading States** - Skeleton loaders and spinners
+
+### Advanced Features
+- ✅ **Search** - Client-side search with debounced input and URL persistence
+- ✅ **Pagination** - Smart pagination with ellipsis and accessibility
+- ✅ **Breadcrumbs** - Auto-generated breadcrumb navigation
+- ✅ **Share Buttons** - Social media sharing (Twitter, Facebook, LinkedIn, Email, Copy link)
+- ✅ **Table of Contents** - Auto-generated TOC with smooth scroll and active highlighting
+- ✅ **UI Components** - Card, Badge, Alert with multiple variants
+
+### Performance & Security
+- ✅ **Security Headers** - X-Frame-Options, CSP, HSTS, and more
+- ✅ **Rate Limiting** - API rate limiting with structured logging
+- ✅ **Input Validation** - Server-side validation and XSS protection
+- ✅ **Image Optimization** - Next.js Image component with S3/CDN support
+- ✅ **Caching Strategy** - Aggressive caching for static assets
 
 ## Prerequisites
 
@@ -300,8 +316,10 @@ src/
 │   │       └── route.ts          # Revalidation webhook endpoint
 │   ├── blog/
 │   │   ├── [slug]/
-│   │   │   └── page.tsx          # Blog post detail
-│   │   └── page.tsx              # Blog listing
+│   │   │   ├── page.tsx          # Blog post detail
+│   │   │   └── error.tsx         # Blog post error boundary
+│   │   ├── page.tsx              # Blog listing with search
+│   │   └── error.tsx             # Blog error boundary
 │   ├── [slug]/
 │   │   └── page.tsx              # Dynamic pages
 │   ├── contact/
@@ -317,21 +335,56 @@ src/
 ├── components/
 │   ├── analytics/
 │   │   └── analytics-script.tsx  # Analytics integration
+│   ├── blog/
+│   │   └── blog-listing.tsx      # Blog listing with search & pagination
+│   ├── breadcrumbs/
+│   │   └── breadcrumbs.tsx       # Breadcrumb navigation
+│   ├── loading/
+│   │   ├── skeleton.tsx          # Base skeleton loader
+│   │   ├── blog-post-skeleton.tsx # Blog post skeleton
+│   │   ├── card-skeleton.tsx     # Card skeleton
+│   │   └── form-skeleton.tsx     # Form skeleton
+│   ├── pagination/
+│   │   └── pagination.tsx        # Pagination component
 │   ├── rush/
 │   │   ├── article.tsx           # Blog post renderer
+│   │   ├── article-content.tsx   # Article content with TOC
 │   │   ├── block-editor-renderer.tsx  # Block editor
 │   │   ├── entry-renderer.tsx    # Generic entry renderer
 │   │   └── form-builder.tsx      # Dynamic forms
+│   ├── search/
+│   │   ├── blog-search.tsx       # Generic search wrapper
+│   │   ├── search-input.tsx      # Search input with debounce
+│   │   └── search-results.tsx    # Search results display
+│   ├── share/
+│   │   └── share-buttons.tsx     # Social media share buttons
+│   ├── structured-data/
+│   │   └── entry-schema.tsx      # JSON-LD structured data
+│   ├── toc/
+│   │   └── table-of-contents.tsx # Table of contents
+│   ├── ui/
+│   │   ├── alert.tsx             # Alert component
+│   │   ├── badge.tsx             # Badge component
+│   │   ├── button.tsx            # Button component
+│   │   ├── card.tsx              # Card component
+│   │   ├── input.tsx             # Input component
+│   │   ├── label.tsx             # Label component
+│   │   ├── optimized-image.tsx   # Optimized image wrapper
+│   │   ├── select.tsx            # Select component
+│   │   └── textarea.tsx          # Textarea component
 │   ├── blog-card.tsx             # Blog card component
 │   └── navigation.tsx            # Main navigation
 ├── lib/
 │   ├── analytics.ts              # Analytics helpers
 │   ├── config.ts                 # Centralized config
 │   ├── date.ts                   # Date formatting
+│   ├── logger.ts                 # Structured logging
+│   ├── metadata.ts               # SEO metadata helpers
 │   ├── rush-cms.ts               # API client
 │   ├── sanitize.ts               # HTML sanitization
 │   └── utils.ts                  # Utility functions
 └── types/
+    ├── analytics.d.ts            # Analytics types
     └── rush-cms.ts               # TypeScript types
 ```
 
@@ -367,7 +420,19 @@ const entries = await getEntries<BlogEntry>(siteSlug, collectionId)
 
 ## Deployment
 
-### Vercel (Recommended)
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for comprehensive deployment guides for:
+- **Netlify** - Complete setup with `netlify.toml` included
+- **Vercel** - Complete setup with `vercel.json` included
+- **Environment Variables** - Required and optional variables
+- **Custom Domains** - SSL and domain configuration
+- **Webhooks** - On-demand revalidation setup
+- **Troubleshooting** - Common deployment issues
+
+### Quick Deploy
+
+#### Vercel (Recommended)
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone)
 
 ```bash
 # Install Vercel CLI
@@ -377,20 +442,9 @@ pnpm i -g vercel
 vercel
 ```
 
-### Netlify
+#### Netlify
 
-Create `netlify.toml`:
-
-```toml
-[build]
-  command = "pnpm build"
-  publish = ".next"
-
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
-```
-
-Deploy:
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy)
 
 ```bash
 # Install Netlify CLI
@@ -398,21 +452,6 @@ pnpm i -g netlify-cli
 
 # Deploy
 netlify deploy --prod
-```
-
-### Docker
-
-```dockerfile
-FROM node:18-alpine
-
-WORKDIR /app
-COPY package*.json pnpm-lock.yaml ./
-RUN npm install -g pnpm && pnpm install
-COPY . .
-RUN pnpm build
-
-EXPOSE 3000
-CMD ["pnpm", "start"]
 ```
 
 ## Troubleshooting
