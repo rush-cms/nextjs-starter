@@ -152,32 +152,34 @@ export function EntryRenderer({ entry, className = '' }: EntryRendererProps) {
 	const customFields = fields.filter(([key]) => !specialFields.includes(key))
 
 	const tags = entry.data.tags as Array<{ name: string } | string> | undefined
+	const title = typeof entry.data.title === 'string' ? entry.data.title : null
+	const excerpt = typeof entry.data.excerpt === 'string' ? entry.data.excerpt : null
 
 	return (
 		<div className={`w-full ${className}`}>
-			{entry.data.title && typeof entry.data.title === 'string' && (
+			{title && (
 				<h1 className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6 leading-tight'>
-					{entry.data.title}
+					{title}
 				</h1>
 			)}
 
-			{entry.data.excerpt && typeof entry.data.excerpt === 'string' && (
+			{excerpt && (
 				<p className='text-base sm:text-lg text-gray-700 italic mb-6 sm:mb-8 pb-4 sm:pb-6 border-b border-gray-200'>
-					{entry.data.excerpt}
+					{excerpt}
 				</p>
 			)}
 
-			{entry.data.featured_image && (
+			{entry.data.featured_image ? (
 				<div className='mb-6 sm:mb-8 lg:mb-10'>
 					<FieldRenderer name='featured_image' value={entry.data.featured_image} />
 				</div>
-			)}
+			) : null}
 
-			{entry.data.content && (
+			{entry.data.content ? (
 				<div className='mb-6 sm:mb-8'>
 					<FieldRenderer name='content' value={entry.data.content} />
 				</div>
-			)}
+			) : null}
 
 			{customFields.length > 0 && (
 				<div className='space-y-4 sm:space-y-6 mt-6 sm:mt-8'>
@@ -189,11 +191,11 @@ export function EntryRenderer({ entry, className = '' }: EntryRendererProps) {
 				</div>
 			)}
 
-			{entry.data.category && (
+			{entry.data.category ? (
 				<div className='mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-gray-200'>
 					<FieldRenderer name='category' value={entry.data.category} />
 				</div>
-			)}
+			) : null}
 
 			{tags && tags.length > 0 && (
 				<div className='flex flex-wrap gap-2 mt-4 sm:mt-6'>

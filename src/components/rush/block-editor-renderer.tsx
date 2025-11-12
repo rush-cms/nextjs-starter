@@ -30,11 +30,14 @@ function YouTubeBlock({ data }: { data: Record<string, unknown> }) {
 					allowFullScreen
 				/>
 			</div>
-			{data.caption && typeof data.caption === 'string' && typeof data.caption === 'string' && (
-				<p className='mt-2 text-xs sm:text-sm text-gray-600 text-center italic'>
-					{data.caption}
-				</p>
-			)}
+			{(() => {
+				const caption = typeof data.caption === 'string' ? data.caption : null
+				return caption ? (
+					<p className='mt-2 text-xs sm:text-sm text-gray-600 text-center italic'>
+						{caption}
+					</p>
+				) : null
+			})()}
 		</div>
 	)
 }
@@ -59,11 +62,14 @@ function GalleryBlock({ data }: { data: Record<string, unknown> }) {
 					</div>
 				))}
 			</div>
-			{data.caption && typeof data.caption === 'string' && typeof data.caption === 'string' && (
-				<p className='mt-3 sm:mt-4 text-xs sm:text-sm text-gray-600 text-center italic'>
-					{data.caption}
-				</p>
-			)}
+			{(() => {
+				const caption = typeof data.caption === 'string' ? data.caption : null
+				return caption ? (
+					<p className='mt-3 sm:mt-4 text-xs sm:text-sm text-gray-600 text-center italic'>
+						{caption}
+					</p>
+				) : null
+			})()}
 		</div>
 	)
 }
@@ -104,11 +110,14 @@ function ImageBlock({ data }: { data: Record<string, unknown> }) {
 					sizes='(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px'
 				/>
 			</div>
-			{data.caption && typeof data.caption === 'string' && typeof data.caption === 'string' && (
-				<figcaption className='mt-2 sm:mt-3 text-xs sm:text-sm text-gray-600 text-center italic'>
-					{data.caption}
-				</figcaption>
-			)}
+			{(() => {
+				const caption = typeof data.caption === 'string' ? data.caption : null
+				return caption ? (
+					<figcaption className='mt-2 sm:mt-3 text-xs sm:text-sm text-gray-600 text-center italic'>
+						{caption}
+					</figcaption>
+				) : null
+			})()}
 		</figure>
 	)
 }
