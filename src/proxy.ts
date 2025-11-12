@@ -1,11 +1,11 @@
 import createNextIntlMiddleware from 'next-intl/middleware'
 import { type NextRequest } from 'next/server'
-import { locales, defaultLocale } from './i18n/config'
+import { defaultLocale } from './i18n/config'
 
 const handleI18nRouting = createNextIntlMiddleware({
-	locales,
+	locales: [defaultLocale],
 	defaultLocale,
-	localePrefix: 'as-needed'
+	localePrefix: 'never'
 })
 
 export function proxy(request: NextRequest) {

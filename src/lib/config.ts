@@ -31,7 +31,8 @@ export const config = {
 		id: process.env.SITE_ID || '1',
 		slug: process.env.SITE_SLUG || 'default',
 		name: process.env.NEXT_PUBLIC_SITE_NAME || 'Rush CMS Starter',
-		url: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+		url: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+		locale: process.env.NEXT_PUBLIC_LOCALE || 'pt-BR'
 	},
 	api: {
 		url: process.env.NEXT_PUBLIC_API_URL!,
