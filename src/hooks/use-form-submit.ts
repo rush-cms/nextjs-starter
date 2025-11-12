@@ -34,7 +34,7 @@ export function useFormSubmit(
 		setData(null)
 
 		try {
-			const url = `/api/rush-cms/forms/${siteSlug}/${formKey}/submit`
+			const url = `/api/forms/${siteSlug}/${formKey}/submit`
 
 			const response = await fetch(url, {
 				method: 'POST',
