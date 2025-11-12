@@ -4,6 +4,7 @@ import './globals.css'
 import { getNavigationItems } from '@/lib/rush-cms'
 import { Navigation } from '@/components/navigation'
 import { config } from '@/lib/config'
+import { AnalyticsScript } from '@/components/analytics/analytics-script'
 
 const geistSans = Geist({
 	variable: '--font-geist-sans',
@@ -37,11 +38,18 @@ export default async function RootLayout({
 		console.error('Failed to fetch navigation:', error)
 	}
 
+	const googleAnalyticsId = process.env.NEXT_PUBLIC_GA_ID
+	const plausibleDomain = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN
+
 	return (
 		<html lang='pt-BR'>
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white text-gray-900`}
 			>
+				<AnalyticsScript
+					googleAnalyticsId={googleAnalyticsId}
+					plausibleDomain={plausibleDomain}
+				/>
 				<Navigation items={navigationItems} />
 				<main className='min-h-screen'>
 					{children}
