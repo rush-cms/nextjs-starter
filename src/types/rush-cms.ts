@@ -217,6 +217,7 @@ export interface BlogEntryData extends Record<string, unknown> {
 	title: string
 	excerpt?: string
 	content?: string
+	author?: string
 	featured_image?: string | { url: string, alt?: string }
 	category?: { name: string, slug: string }
 	tags?: Array<{ name: string, slug: string }>

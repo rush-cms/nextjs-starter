@@ -1,14 +1,15 @@
 import { getEntries } from '@/lib/rush-cms'
 import { formatDate } from '@/lib/date'
 import { config } from '@/lib/config'
+import { generatePageMetadata } from '@/lib/metadata'
 import { BlogCard } from '@/components/blog-card'
 import type { BlogEntry, BlogEntryData } from '@/types/rush-cms'
-import type { Metadata } from 'next'
 
-export const metadata: Metadata = {
-	title: 'Blog',
-	description: 'Artigos e notícias do nosso blog'
-}
+export const metadata = generatePageMetadata({
+	title: `Blog - ${config.site.name}`,
+	description: 'Últimas notícias, artigos e atualizações do nosso blog',
+	path: '/blog'
+})
 
 export default async function BlogPage() {
 	const entries = await getEntries<BlogEntryData>(config.site.slug, config.collections.blog, {

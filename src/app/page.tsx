@@ -2,8 +2,15 @@ import Link from 'next/link'
 import { getEntries } from '@/lib/rush-cms'
 import { formatDate } from '@/lib/date'
 import { config } from '@/lib/config'
+import { generatePageMetadata } from '@/lib/metadata'
 import { BlogCard } from '@/components/blog-card'
 import type { BlogEntry, BlogEntryData } from '@/types/rush-cms'
+
+export const metadata = generatePageMetadata({
+	title: `${config.site.name} - Modern Content Platform`,
+	description: 'Conteúdo moderno e dinâmico, powered by Rush CMS. Descubra nossos artigos e entre em contato.',
+	path: '/'
+})
 
 export default async function HomePage() {
 	let featuredEntries: BlogEntry[] = []

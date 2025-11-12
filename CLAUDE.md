@@ -13,6 +13,7 @@
 10. **NEVER** create solo .md files in root, use only  `./.claude` or  `./docs folder`
 11. **MODERN** approach, bring insights if you feel necessary
 12. Check package.json ßto see current packages versions
+13. Commits are **ALWAYS** atomic and lowercase
 
 ### Examples
 ```typescript

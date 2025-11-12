@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import { getEntryBySlug, getEntries } from '@/lib/rush-cms'
 import { Article } from '@/components/rush/article'
 import { config } from '@/lib/config'
+import { generateEntryMetadata } from '@/lib/metadata'
 import type { RushCMSEntry, BlogEntry, BlogEntryData } from '@/types/rush-cms'
 import type { Metadata } from 'next'
 
@@ -31,23 +32,22 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 		}
 	}
 
-	const featuredImage = entry.data.featured_image
-	const imageUrl = typeof featuredImage === 'string'
-		? featuredImage
-		: featuredImage?.url
-
-	return {
-		title: entry.data.title,
-		description: entry.data.excerpt || entry.data.title,
-		openGraph: {
-			title: entry.data.title,
-			description: entry.data.excerpt || entry.data.title,
-			type: 'article',
-			publishedTime: entry.published_at,
-			modifiedTime: entry.updated_at,
-			images: imageUrl ? [{ url: imageUrl }] : []
-		}
-	}
+	return generateEntryMetadata<BlogEntryData>({
+		entry,
+		path: `/blog/${entry.slug}`,
+		type: 'article',
+		getTitleFn: (data) => data.title,
+		getDescriptionFn: (data) => data.excerpt || data.title,
+		getImageFn: (data): string | undefined => {
+			const img = data.featured_image
+			if (typeof img === 'string') return img
+			if (img && typeof img === 'object' && 'url' in img) {
+				return typeof img.url === 'string' ? img.url : undefined
+			}
+			return undefined
+		},
+		getAuthorFn: (data): string | undefined => data.author
+	})
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {

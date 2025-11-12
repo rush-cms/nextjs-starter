@@ -2,12 +2,16 @@ import Image from 'next/image'
 import type { RushCMSEntry } from '@/types/rush-cms'
 import { sanitizeHTML } from '@/lib/sanitize'
 import { formatDate } from '@/lib/date'
+import { ArticleSchema, BreadcrumbSchema } from '@/components/structured-data/entry-schema'
+import { config } from '@/lib/config'
 
 interface ArticleProps {
 	entry: RushCMSEntry<Record<string, unknown>>
+	showStructuredData?: boolean
+	basePath?: string
 }
 
-export function Article({ entry }: ArticleProps) {
+export function Article({ entry, showStructuredData = true, basePath = '/blog' }: ArticleProps) {
 	const { data, published_at, updated_at } = entry
 	const category = data.category as { name: string, slug: string } | undefined
 	const featuredImage = data.featured_image as { url: string, alt?: string } | string | undefined
@@ -15,9 +19,32 @@ export function Article({ entry }: ArticleProps) {
 	const excerpt = typeof data.excerpt === 'string' ? data.excerpt : undefined
 	const content = typeof data.content === 'string' ? data.content : undefined
 	const title = typeof data.title === 'string' ? data.title : ''
+	const author = typeof data.author === 'string' ? data.author : undefined
 
 	return (
-		<article className='w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12'>
+		<>
+			{showStructuredData && (
+				<>
+					<ArticleSchema
+						entry={entry}
+						getTitleFn={(data) => (data.title as string) || 'Untitled'}
+						getDescriptionFn={(data) => (data.excerpt as string) || ''}
+						getImageFn={(data) => {
+							const img = data.featured_image
+							return typeof img === 'string' ? img : (img as { url?: string })?.url
+						}}
+						getAuthorFn={(data) => data.author as string | undefined}
+					/>
+					<BreadcrumbSchema
+						items={[
+							{ name: 'Home', url: config.site.url },
+							{ name: basePath.replace('/', '').charAt(0).toUpperCase() + basePath.slice(2), url: `${config.site.url}${basePath}` },
+							{ name: title, url: `${config.site.url}${basePath}/${entry.slug}` }
+						]}
+					/>
+				</>
+			)}
+			<article className='w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12'>
 			{category && (
 				<div className='mb-3 sm:mb-4'>
 					<span className='inline-block px-3 py-1 text-xs sm:text-sm font-medium bg-blue-100 text-blue-800 rounded-full'>
@@ -86,5 +113,6 @@ export function Article({ entry }: ArticleProps) {
 				</div>
 			)}
 		</article>
+		</>
 	)
 }
