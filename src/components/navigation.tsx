@@ -31,12 +31,12 @@ function NavigationItems({
 
 	return (
 		<ul className={mobile ? 'space-y-1' : 'flex items-center gap-2'}>
-			{items.map(item => {
+			{items.map((item, itemIndex) => {
 				const active = isActive(item.url)
 				const hasChildren = item.children && item.children.length > 0
 
 				return (
-					<li key={item.id}>
+					<li key={`${item.id}-${itemIndex}`}>
 						<Link
 							href={item.url}
 							target={item.target || '_self'}
@@ -54,11 +54,11 @@ function NavigationItems({
 						</Link>
 						{hasChildren && (
 							<ul className='mt-1 space-y-1'>
-								{item.children?.map(child => {
+								{item.children?.map((child, childIndex) => {
 									const childActive = isActive(child.url)
 
 									return (
-										<li key={child.id} className='ml-4'>
+										<li key={`${child.id}-${childIndex}`} className='ml-4'>
 											<Link
 												href={child.url}
 												target={child.target || '_self'}

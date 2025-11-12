@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import type { RushCMSEntry } from '@/types/rush-cms'
 import { formatDate } from '@/lib/date'
 import { ArticleSchema, BreadcrumbSchema } from '@/components/structured-data/entry-schema'
@@ -133,13 +134,13 @@ export function Article({ entry, showStructuredData = true, showBreadcrumbs = tr
 						const tagName = typeof tag === 'string' ? tag : tag
 
 						return (
-							<a
+							<Link
 								key={index}
 								href={`/blog/tag/${tagSlug}`}
 								className='px-3 py-1 text-xs sm:text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full transition-colors duration-200'
 							>
 								#{tagName}
-							</a>
+							</Link>
 						)
 					})}
 				</div>
