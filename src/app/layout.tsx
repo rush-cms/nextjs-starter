@@ -20,13 +20,28 @@ const geistMono = Geist_Mono({
 	subsets: ['latin']
 })
 
-export const metadata: Metadata = {
-	title: {
-		default: config.site.name,
-		template: `%s | ${config.site.name}`
-	},
-	description: 'Modern website powered by Rush CMS',
-	metadataBase: new URL(config.site.url)
+export async function generateMetadata(): Promise<Metadata> {
+	let siteName = config.site.name
+
+	try {
+		const teams = await getTeams()
+		const currentTeam = teams.find(team => team.slug === config.site.slug)
+
+		if (currentTeam) {
+			siteName = currentTeam.name
+		}
+	} catch (error) {
+		logger.error('Failed to fetch team info for metadata', { error })
+	}
+
+	return {
+		title: {
+			default: siteName,
+			template: `%s | ${siteName}`
+		},
+		description: 'Modern website powered by Rush CMS',
+		metadataBase: new URL(config.site.url)
+	}
 }
 
 export default async function RootLayout({
