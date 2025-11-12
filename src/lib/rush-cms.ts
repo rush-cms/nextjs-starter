@@ -219,6 +219,32 @@ export async function getForm(siteSlug: string, formKey: string): Promise<RushCM
 	return response.data
 }
 
+export async function getTags(siteSlug: string): Promise<RushCMSTag[]> {
+	const response = await fetchAPI<RushCMSResponse<RushCMSTag[]>>(
+		`/api/v1/${siteSlug}/tags`,
+		{
+			revalidate: 3600,
+			tags: ['tags']
+		}
+	)
+
+	return response.data
+}
+
+export async function getEntriesByTag<T = Record<string, unknown>>(
+	siteSlug: string,
+	tagSlug: string
+): Promise<RushCMSEntry<T>[]> {
+	const response = await fetchAPI<RushCMSResponse<RushCMSEntry<T>[]>>(
+		`/api/v1/${siteSlug}/tags/${tagSlug}/entries`,
+		{
+			tags: [`tag-${tagSlug}-entries`]
+		}
+	)
+
+	return response.data
+}
+
 export function getAnalyticsScriptUrl(siteSlug: string): string {
 	if (!API_URL) {
 		throw new Error('NEXT_PUBLIC_API_URL is not configured')

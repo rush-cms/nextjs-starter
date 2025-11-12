@@ -128,14 +128,20 @@ export function Article({ entry, showStructuredData = true, showBreadcrumbs = tr
 			{tags && tags.length > 0 && (
 				<div className='flex flex-wrap gap-2 mt-8 sm:mt-10 lg:mt-12 pt-6 sm:pt-8 border-t border-gray-200'>
 					<span className='text-sm font-medium text-gray-900 mr-2'>Tags:</span>
-					{tags.map((tag, index) => (
-						<span
-							key={index}
-							className='px-3 py-1 text-xs sm:text-sm bg-gray-100 text-gray-700 rounded-full'
-						>
-							#{tag}
-						</span>
-					))}
+					{tags.map((tag, index) => {
+						const tagSlug = typeof tag === 'string' ? tag.toLowerCase().replace(/\s+/g, '-') : tag
+						const tagName = typeof tag === 'string' ? tag : tag
+
+						return (
+							<a
+								key={index}
+								href={`/blog/tag/${tagSlug}`}
+								className='px-3 py-1 text-xs sm:text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full transition-colors duration-200'
+							>
+								#{tagName}
+							</a>
+						)
+					})}
 				</div>
 			)}
 
