@@ -1,11 +1,18 @@
-import { getForm } from '@/lib/rush-cms'
+import { getForm, getSiteName } from '@/lib/rush-cms'
 import { FormBuilder } from '@/components/rush/form-builder'
 import { config } from '@/lib/config'
+import { generatePageMetadata } from '@/lib/metadata'
 import type { Metadata } from 'next'
 
-export const metadata: Metadata = {
-	title: 'Contato',
-	description: 'Entre em contato conosco'
+export async function generateMetadata(): Promise<Metadata> {
+	const siteName = await getSiteName(config.site.slug, config.site.name)
+
+	return generatePageMetadata({
+		title: 'Contato',
+		description: 'Entre em contato conosco',
+		path: '/contact',
+		siteName
+	})
 }
 
 export default async function ContactPage() {

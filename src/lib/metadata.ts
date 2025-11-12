@@ -8,6 +8,7 @@ interface PageMetadataOptions {
 	path?: string
 	image?: string
 	noIndex?: boolean
+	siteName?: string
 }
 
 interface EntryMetadataOptions<T = Record<string, unknown>> {
@@ -18,6 +19,7 @@ interface EntryMetadataOptions<T = Record<string, unknown>> {
 	getDescriptionFn?: (data: T) => string
 	getImageFn?: (data: T) => string | undefined
 	getAuthorFn?: (data: T) => string | undefined
+	siteName?: string
 }
 
 export function generatePageMetadata(options: PageMetadataOptions): Metadata {
@@ -26,7 +28,8 @@ export function generatePageMetadata(options: PageMetadataOptions): Metadata {
 		description,
 		path = '',
 		image = '/og-image.jpg',
-		noIndex = false
+		noIndex = false,
+		siteName = config.site.name
 	} = options
 
 	const url = `${config.site.url}${path}`
@@ -40,7 +43,7 @@ export function generatePageMetadata(options: PageMetadataOptions): Metadata {
 			title,
 			description,
 			url,
-			siteName: config.site.name,
+			siteName,
 			images: [
 				{
 					url: imageUrl,
@@ -74,7 +77,8 @@ export function generateEntryMetadata<T = Record<string, unknown>>(
 		getTitleFn = (data: T) => (data as { title?: string }).title || 'Untitled',
 		getDescriptionFn = (data: T) => (data as { excerpt?: string }).excerpt || '',
 		getImageFn = (data: T) => (data as { featured_image?: string }).featured_image,
-		getAuthorFn = (data: T) => (data as { author?: string }).author
+		getAuthorFn = (data: T) => (data as { author?: string }).author,
+		siteName = config.site.name
 	} = options
 
 	const title = getTitleFn(entry.data)
@@ -92,7 +96,7 @@ export function generateEntryMetadata<T = Record<string, unknown>>(
 		title,
 		description,
 		url,
-		siteName: config.site.name,
+		siteName,
 		images: [
 			{
 				url: imageUrl,
