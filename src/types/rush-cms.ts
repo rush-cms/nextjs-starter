@@ -142,7 +142,7 @@ export interface RushCMSFormSubmissionResponse {
 }
 
 export interface RushCMSNavigationItem {
-	id: number
+	id?: number
 	parent_id?: number | null
 	title: string
 	url: string

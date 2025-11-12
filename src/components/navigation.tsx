@@ -34,9 +34,10 @@ function NavigationItems({
 			{items.map((item, itemIndex) => {
 				const active = isActive(item.url)
 				const hasChildren = item.children && item.children.length > 0
+				const itemKey = item.id ? `nav-${item.id}` : `nav-${item.url}-${itemIndex}`
 
 				return (
-					<li key={`${item.id}-${itemIndex}`}>
+					<li key={itemKey}>
 						<Link
 							href={item.url}
 							target={item.target || '_self'}
@@ -56,9 +57,10 @@ function NavigationItems({
 							<ul className='mt-1 space-y-1'>
 								{item.children?.map((child, childIndex) => {
 									const childActive = isActive(child.url)
+									const childKey = child.id ? `nav-child-${child.id}` : `nav-child-${child.url}-${childIndex}`
 
 									return (
-										<li key={`${child.id}-${childIndex}`} className='ml-4'>
+										<li key={childKey} className='ml-4'>
 											<Link
 												href={child.url}
 												target={child.target || '_self'}
