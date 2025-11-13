@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next'
-import { getEntries } from '@/lib/rush-cms'
+import { getEntriesByCollection } from '@/lib/rush-cms'
 import { config } from '@/lib/config'
 import type { BlogEntryData } from '@/types/rush-cms'
 
@@ -30,7 +30,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	let blogPages: MetadataRoute.Sitemap = []
 
 	try {
-		const entries = await getEntries<BlogEntryData>(config.site.slug, config.collections.blog, {
+		const entries = await getEntriesByCollection<BlogEntryData>(config.site.slug, 'blog', {
 			status: 'published'
 		})
 

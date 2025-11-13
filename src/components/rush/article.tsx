@@ -1,9 +1,11 @@
 import Link from 'next/link'
-import type { RushCMSEntry } from '@/types/rush-cms'
+import Image from 'next/image'
+import type { RushCMSEntry, BlockData } from '@/types/rush-cms'
 import { formatDate } from '@/lib/date'
 import { ArticleSchema, BreadcrumbSchema } from '@/components/structured-data/entry-schema'
 import { ShareButtons } from '@/components/share/share-buttons'
 import { Breadcrumbs } from '@/components/breadcrumbs/breadcrumbs'
+import { BlockRenderer } from '@/components/blocks/block-renderer'
 import { config } from '@/lib/config'
 
 interface ArticleProps {
@@ -15,10 +17,10 @@ interface ArticleProps {
 }
 
 export function Article({ entry, showStructuredData = true, showBreadcrumbs = true, showToc = true, basePath = '/blog' }: ArticleProps) {
-	const { data, published_at, updated_at, title, excerpt, author } = entry
+	const { data, published_at, updated_at, title, excerpt, author, featured_image } = entry
 	const categories = data.categories as string[] | undefined
 	const tags = data.tags as string[] | undefined
-	const content = data.content as Array<{ type: string, data: Record<string, unknown> }> | undefined
+	const content = data.content as BlockData[] | undefined
 
 	const currentUrl = `${config.site.url}${basePath}/${entry.slug}`
 
@@ -101,6 +103,19 @@ export function Article({ entry, showStructuredData = true, showBreadcrumbs = tr
 				</p>
 			)}
 
+			{featured_image && (
+				<div className='mb-6 sm:mb-8 rounded-lg overflow-hidden'>
+					<Image
+						src={featured_image.url}
+						alt={featured_image.alt || title}
+						width={1200}
+						height={630}
+						className='w-full h-auto'
+						priority
+					/>
+				</div>
+			)}
+
 			<div className='mb-6 sm:mb-8 pb-6 sm:pb-8 border-b border-gray-200'>
 				<ShareButtons
 					url={currentUrl}
@@ -112,30 +127,8 @@ export function Article({ entry, showStructuredData = true, showBreadcrumbs = tr
 			</div>
 
 			{content && content.length > 0 && (
-				<div className='prose prose-slate max-w-none mb-8'>
-					{content.map((block, index) => {
-						if (block.type === 'richtext' && block.data.content) {
-							const richtextContent = block.data.content as { type: string, content?: unknown[] }
-							if (richtextContent.content && Array.isArray(richtextContent.content)) {
-								return (
-									<div key={index}>
-										{richtextContent.content.map((node: unknown, nodeIndex: number) => {
-											const typedNode = node as { type?: string, content?: Array<{ type?: string, text?: string }> }
-											if (typedNode.type === 'paragraph' && typedNode.content) {
-												return (
-													<p key={nodeIndex}>
-														{typedNode.content.map((textNode, textIndex) => textNode.text || '').join('')}
-													</p>
-												)
-											}
-											return null
-										})}
-									</div>
-								)
-							}
-						}
-						return null
-					})}
+				<div className='mb-8'>
+					<BlockRenderer blocks={content} />
 				</div>
 			)}
 

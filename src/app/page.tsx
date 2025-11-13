@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { getEntries } from '@/lib/rush-cms'
+import { getEntriesByCollection } from '@/lib/rush-cms'
 import { formatDate } from '@/lib/date'
 import { config } from '@/lib/config'
 import { BlogCard } from '@/components/blog-card'
@@ -7,10 +7,10 @@ import { HomeHero } from '@/components/home-hero'
 import type { BlogEntryData } from '@/types/rush-cms'
 
 export default async function HomePage() {
-	let featuredEntries: Awaited<ReturnType<typeof getEntries<BlogEntryData>>> = []
+	let featuredEntries: Awaited<ReturnType<typeof getEntriesByCollection<BlogEntryData>>> = []
 
 	try {
-		const entries = await getEntries<BlogEntryData>(config.site.slug, config.collections.blog, {
+		const entries = await getEntriesByCollection<BlogEntryData>(config.site.slug, 'blog', {
 			status: 'published'
 		})
 		featuredEntries = entries.slice(0, 3)
