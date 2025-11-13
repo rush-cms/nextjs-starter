@@ -1,4 +1,4 @@
-import { getEntries, getSiteName } from '@/lib/rush-cms'
+import { getEntriesByCollection, getSiteName } from '@/lib/rush-cms'
 import { config } from '@/lib/config'
 import { generatePageMetadata } from '@/lib/metadata'
 import { BlogListing } from '@/components/blog/blog-listing'
@@ -18,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function BlogPage() {
-	const entries = await getEntries<BlogEntryData>(config.site.slug, config.collections.blog, {
+	const entries = await getEntriesByCollection<BlogEntryData>(config.site.slug, 'blog', {
 		status: 'published'
 	})
 
