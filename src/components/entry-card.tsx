@@ -1,10 +1,10 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import type { BlogEntry } from '@/types/rush-cms'
+import type { RushCMSEntry } from '@/types/rush-cms'
 import { getImageProps } from '@/lib/utils'
 
-interface BlogCardProps {
-	entry: BlogEntry
+interface EntryCardProps {
+	entry: RushCMSEntry
 	formatDate: (dateString: string) => string
 	headingLevel?: 'h2' | 'h3'
 	imageHeight?: string
@@ -12,14 +12,14 @@ interface BlogCardProps {
 	basePath?: string
 }
 
-export function BlogCard({
+export function EntryCard({
 	entry,
 	formatDate,
 	headingLevel = 'h2',
 	imageHeight = 'h-48 sm:h-56',
 	priority = false,
 	basePath = '/blog'
-}: BlogCardProps) {
+}: EntryCardProps) {
 	const category = entry.data.category
 	const image = getImageProps(entry.data.featured_image, entry.data.title)
 

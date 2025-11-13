@@ -1,6 +1,6 @@
 'use client'
 
-import { BlogCard } from '@/components/blog-card'
+import { EntryCard } from '@/components/entry-card'
 import { BlogSearch } from '@/components/search/blog-search'
 import { Pagination } from '@/components/pagination/pagination'
 import { formatDate } from '@/lib/date'
@@ -39,7 +39,7 @@ export function BlogListing({ entries, itemsPerPage = 9 }: BlogListingProps) {
 					<>
 						<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8'>
 							{paginatedEntries.map((entry) => (
-								<BlogCard
+								<EntryCard
 									key={entry.id}
 									entry={entry}
 									formatDate={formatDate}
