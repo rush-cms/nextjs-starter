@@ -18,11 +18,14 @@ export interface RushCMSCollection {
 
 export interface RushCMSImage {
 	id: number
-	url: string
 	name: string
-	size: number
+	file_name: string
 	mime_type: string
-	alt: string
+	size: number
+	url: string
+	thumb?: string
+	preview?: string
+	alt?: string
 	responsive?: {
 		thumb?: string
 		medium?: string
@@ -63,6 +66,7 @@ export interface RushCMSEntry<T = Record<string, unknown>> {
 	title: string
 	slug: string
 	excerpt: string
+	featured_image?: RushCMSImage | null
 	data: T
 	status: EntryStatus
 	published_at: string
@@ -212,9 +216,177 @@ export interface FetchAPIOptions {
 	tags?: string[]
 }
 
+// Block Types
+export interface BaseBlockData {
+	type: string
+	data: Record<string, unknown>
+}
+
+export interface RichTextBlockData extends BaseBlockData {
+	type: 'richtext'
+	data: {
+		content: unknown
+	}
+}
+
+export interface ImageBlockData extends BaseBlockData {
+	type: 'image'
+	data: {
+		image?: RushCMSImage
+		caption?: string
+		alt?: string
+		alignment?: 'left' | 'center' | 'right'
+	}
+}
+
+export interface GalleryBlockData extends BaseBlockData {
+	type: 'gallery'
+	data: {
+		images: RushCMSImage[]
+		columns?: number
+		caption?: string
+	}
+}
+
+export interface VideoBlockData extends BaseBlockData {
+	type: 'video'
+	data: {
+		url: string
+		caption?: string
+		autoplay?: boolean
+	}
+}
+
+export interface YoutubeBlockData extends BaseBlockData {
+	type: 'youtube'
+	data: {
+		url: string
+		video_id?: string
+	}
+}
+
+export interface QuoteBlockData extends BaseBlockData {
+	type: 'quote'
+	data: {
+		content: string
+		author?: string
+		cite?: string
+	}
+}
+
+export interface CalloutBlockData extends BaseBlockData {
+	type: 'callout'
+	data: {
+		content: string
+		type?: 'info' | 'warning' | 'success' | 'error'
+		title?: string
+	}
+}
+
+export interface AlertBlockData extends BaseBlockData {
+	type: 'alert'
+	data: {
+		content: string
+		type: 'info' | 'warning' | 'error' | 'success'
+		title?: string
+	}
+}
+
+export interface CodeBlockData extends BaseBlockData {
+	type: 'code'
+	data: {
+		code: string
+		language?: string
+		filename?: string
+	}
+}
+
+export interface DividerBlockData extends BaseBlockData {
+	type: 'divider'
+	data: {
+		style?: 'solid' | 'dashed' | 'dotted'
+	}
+}
+
+export interface ButtonBlockData extends BaseBlockData {
+	type: 'button'
+	data: {
+		text: string
+		url: string
+		variant?: 'primary' | 'secondary' | 'outline'
+		target?: '_self' | '_blank'
+	}
+}
+
+export interface ColumnsBlockData extends BaseBlockData {
+	type: 'columns'
+	data: {
+		columns: Array<{
+			content: BaseBlockData[]
+		}>
+	}
+}
+
+export interface ToggleBlockData extends BaseBlockData {
+	type: 'toggle'
+	data: {
+		title: string
+		content: string
+	}
+}
+
+export interface EmbedBlockData extends BaseBlockData {
+	type: 'embed'
+	data: {
+		url: string
+		html?: string
+	}
+}
+
+export interface BookmarkBlockData extends BaseBlockData {
+	type: 'bookmark'
+	data: {
+		url: string
+		title?: string
+		description?: string
+		image?: string
+	}
+}
+
+export interface ParagraphBlockData extends BaseBlockData {
+	type: 'paragraph'
+	data: {
+		content: string
+	}
+}
+
+export type BlockData =
+	| RichTextBlockData
+	| ImageBlockData
+	| GalleryBlockData
+	| VideoBlockData
+	| YoutubeBlockData
+	| QuoteBlockData
+	| CalloutBlockData
+	| AlertBlockData
+	| CodeBlockData
+	| DividerBlockData
+	| ButtonBlockData
+	| ColumnsBlockData
+	| ToggleBlockData
+	| EmbedBlockData
+	| BookmarkBlockData
+	| ParagraphBlockData
+	| BaseBlockData
+
+export interface BaseBlockProps {
+	type: string
+	data: Record<string, unknown>
+}
+
 // Blog Entry Types
 export interface BlogEntryData extends Record<string, unknown> {
-	content?: Array<{ type: string, data: Record<string, unknown> }>
+	content?: BlockData[]
 	categories?: string[]
 	tags?: string[]
 }

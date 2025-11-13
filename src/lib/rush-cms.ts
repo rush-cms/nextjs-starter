@@ -7,6 +7,7 @@ import type {
 	RushCMSNavigationItem,
 	RushCMSForm,
 	RushCMSSite,
+	RushCMSTag,
 	GetEntriesParams,
 	FetchAPIOptions,
 	RushCMSError as RushCMSErrorType,
@@ -126,6 +127,24 @@ export async function getCollection(
 	)
 
 	return response.data
+}
+
+export async function getEntriesByCollection<T = Record<string, unknown>>(
+	siteSlug: string,
+	collectionSlug: string,
+	params?: GetEntriesParams
+): Promise<RushCMSEntry<T>[]> {
+	const collection = await getCollection(siteSlug, collectionSlug)
+	return getEntries<T>(siteSlug, collection.id, params)
+}
+
+export async function getEntryByCollectionAndSlug<T = Record<string, unknown>>(
+	siteSlug: string,
+	collectionSlug: string,
+	entrySlug: string
+): Promise<RushCMSEntry<T>> {
+	const collection = await getCollection(siteSlug, collectionSlug)
+	return getEntryBySlug<T>(siteSlug, entrySlug, collection.id)
 }
 
 export async function getEntries<T = Record<string, unknown>>(
