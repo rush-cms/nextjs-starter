@@ -253,6 +253,7 @@ export interface VideoBlockData extends BaseBlockData {
 	data: {
 		url: string
 		caption?: string
+		poster?: string
 		autoplay?: boolean
 	}
 }
@@ -262,6 +263,8 @@ export interface YoutubeBlockData extends BaseBlockData {
 	data: {
 		url: string
 		video_id?: string
+		title?: string
+		caption?: string
 	}
 }
 
@@ -304,7 +307,7 @@ export interface CodeBlockData extends BaseBlockData {
 export interface DividerBlockData extends BaseBlockData {
 	type: 'divider'
 	data: {
-		style?: 'solid' | 'dashed' | 'dotted'
+		style?: 'solid' | 'dashed' | 'dotted' | 'double'
 	}
 }
 
@@ -313,8 +316,10 @@ export interface ButtonBlockData extends BaseBlockData {
 	data: {
 		text: string
 		url: string
-		variant?: 'primary' | 'secondary' | 'outline'
+		variant?: 'primary' | 'secondary' | 'outline' | 'ghost'
+		size?: 'sm' | 'md' | 'lg'
 		target?: '_self' | '_blank'
+		openInNewTab?: boolean
 	}
 }
 
@@ -340,6 +345,9 @@ export interface EmbedBlockData extends BaseBlockData {
 	data: {
 		url: string
 		html?: string
+		title?: string
+		caption?: string
+		aspectRatio?: '16/9' | '4/3' | '1/1'
 	}
 }
 
