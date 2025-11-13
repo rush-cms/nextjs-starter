@@ -44,10 +44,6 @@ export const config = {
 		revalidateTime: parseInt(process.env.REVALIDATE_TIME || '1800'),
 		revalidateSecret: process.env.REVALIDATE_SECRET
 	},
-	collections: {
-		blog: parseInt(process.env.BLOG_COLLECTION_ID || '1'),
-		pages: parseInt(process.env.PAGES_COLLECTION_ID || '2')
-	},
 	navigation: {
 		main: parseInt(process.env.NAVIGATION_ID || '1')
 	},
