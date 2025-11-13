@@ -9,6 +9,7 @@ interface BlogCardProps {
 	headingLevel?: 'h2' | 'h3'
 	imageHeight?: string
 	priority?: boolean
+	basePath?: string
 }
 
 export function BlogCard({
@@ -16,7 +17,8 @@ export function BlogCard({
 	formatDate,
 	headingLevel = 'h2',
 	imageHeight = 'h-48 sm:h-56',
-	priority = false
+	priority = false,
+	basePath = '/blog'
 }: BlogCardProps) {
 	const category = entry.data.category
 	const image = getImageProps(entry.data.featured_image, entry.data.title)
@@ -26,7 +28,7 @@ export function BlogCard({
 	return (
 		<article className='group relative flex flex-col bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden'>
 			<Link
-				href={`/blog/${entry.slug}`}
+				href={`${basePath}/${entry.slug}`}
 				className='absolute inset-0 z-10'
 				aria-label={`Leia o artigo: ${entry.data.title}`}
 			>
