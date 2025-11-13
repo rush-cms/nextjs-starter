@@ -8,41 +8,49 @@ import type { Metadata } from 'next'
 
 interface EntryPageProps {
 	params: Promise<{
-		collectionSlug: string
+		slug: string
 		entrySlug: string
 	}>
 }
 
 export async function generateStaticParams() {
-	const collections = await getCollections(config.site.slug)
-
 	const params = []
 
-	for (const collection of collections) {
-		const entries = await getEntriesByCollection(
-			config.site.slug,
-			collection.slug,
-			{ status: 'published' }
-		)
+	try {
+		const collections = await getCollections(config.site.slug)
 
-		for (const entry of entries) {
-			params.push({
-				collectionSlug: collection.slug,
-				entrySlug: entry.slug
-			})
+		for (const collection of collections) {
+			try {
+				const entries = await getEntriesByCollection(
+					config.site.slug,
+					collection.slug,
+					{ status: 'published' }
+				)
+
+				for (const entry of entries) {
+					params.push({
+						slug: collection.slug,
+						entrySlug: entry.slug
+					})
+				}
+			} catch (error) {
+				console.error(`Failed to fetch entries for collection ${collection.slug}:`, error)
+			}
 		}
+	} catch (error) {
+		console.error('Failed to fetch collections for static params:', error)
 	}
 
 	return params
 }
 
 export async function generateMetadata({ params }: EntryPageProps): Promise<Metadata> {
-	const { collectionSlug, entrySlug } = await params
+	const { slug, entrySlug } = await params
 
 	try {
 		const entry = await getEntryByCollectionAndSlug<BlogEntryData>(
 			config.site.slug,
-			collectionSlug,
+			slug,
 			entrySlug
 		)
 
@@ -54,7 +62,7 @@ export async function generateMetadata({ params }: EntryPageProps): Promise<Meta
 
 		return generateEntryMetadata<BlogEntryData>({
 			entry,
-			path: `/${collectionSlug}/${entry.slug}`,
+			path: `/${slug}/${entry.slug}`,
 			type: 'article',
 			getTitleFn: () => entry.title,
 			getDescriptionFn: () => entry.excerpt || entry.title,
@@ -69,12 +77,12 @@ export async function generateMetadata({ params }: EntryPageProps): Promise<Meta
 }
 
 export default async function EntryPage({ params }: EntryPageProps) {
-	const { collectionSlug, entrySlug } = await params
+	const { slug, entrySlug } = await params
 
 	try {
 		const entry = await getEntryByCollectionAndSlug<BlogEntryData>(
 			config.site.slug,
-			collectionSlug,
+			slug,
 			entrySlug
 		)
 
@@ -82,7 +90,7 @@ export default async function EntryPage({ params }: EntryPageProps) {
 			notFound()
 		}
 
-		return <Article entry={entry} basePath={`/${collectionSlug}`} />
+		return <Article entry={entry} basePath={`/${slug}`} />
 	} catch {
 		notFound()
 	}

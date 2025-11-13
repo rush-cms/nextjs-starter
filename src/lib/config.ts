@@ -53,6 +53,9 @@ export const config = {
 	media: {
 		s3Url: process.env.NEXT_PUBLIC_S3_URL,
 		bucket: process.env.NEXT_PUBLIC_S3_BUCKET
+	},
+	routing: {
+		rootCollectionSlug: process.env.ROOT_COLLECTION_SLUG || undefined
 	}
 } as const
 
