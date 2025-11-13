@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { BlogCard } from '@/components/blog-card'
+import { EntryCard } from '@/components/entry-card'
 import { formatDate } from '@/lib/date'
 import type { RushCMSEntry, RushCMSCollection } from '@/types/rush-cms'
 
@@ -58,7 +58,7 @@ export function CollectionSection({ collection, entries, maxEntries = 3 }: Colle
 
 			<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8'>
 				{displayEntries.map((entry, index) => (
-					<BlogCard
+					<EntryCard
 						key={entry.id}
 						entry={entry}
 						formatDate={formatDate}

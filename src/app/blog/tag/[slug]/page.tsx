@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { getEntriesByTag, getTags } from '@/lib/rush-cms'
 import { config } from '@/lib/config'
-import { BlogCard } from '@/components/blog-card'
+import { EntryCard } from '@/components/entry-card'
 import { formatDate } from '@/lib/date'
 import type { BlogEntryData } from '@/types/rush-cms'
 import type { Metadata } from 'next'
@@ -93,7 +93,7 @@ export default async function TagPage({ params }: TagPageProps) {
 				{entries.length > 0 ? (
 					<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8'>
 						{entries.map((entry) => (
-							<BlogCard
+							<EntryCard
 								key={entry.id}
 								entry={entry}
 								formatDate={formatDate}
