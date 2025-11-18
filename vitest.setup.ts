@@ -47,5 +47,5 @@ vi.mock('next-intl/server', () => ({
 }))
 
 vi.mock('next/image', () => ({
-	default: (props: any) => props
+	default: (props: Record<string, unknown>) => props
 }))

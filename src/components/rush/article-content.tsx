@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useMemo } from 'react'
 import { TableOfContents, type TocHeading } from '@/components/toc/table-of-contents'
 
 interface ArticleContentProps {
@@ -9,10 +9,7 @@ interface ArticleContentProps {
 }
 
 export function ArticleContent({ content, showToc = true }: ArticleContentProps) {
-	const [headings, setHeadings] = useState<TocHeading[]>([])
-	const [processedContent, setProcessedContent] = useState(content)
-
-	useEffect(() => {
+	const { headings, processedContent } = useMemo(() => {
 		const parser = new DOMParser()
 		const doc = parser.parseFromString(content, 'text/html')
 		const elements = doc.querySelectorAll('h2, h3')
@@ -44,8 +41,10 @@ export function ArticleContent({ content, showToc = true }: ArticleContentProps)
 			})
 		})
 
-		setHeadings(extractedHeadings)
-		setProcessedContent(doc.body.innerHTML)
+		return {
+			headings: extractedHeadings,
+			processedContent: doc.body.innerHTML
+		}
 	}, [content])
 
 	if (!showToc || headings.length === 0) {

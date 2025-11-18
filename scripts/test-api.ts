@@ -9,6 +9,30 @@ interface TestResult {
 	data?: unknown
 }
 
+interface Site {
+	name: string
+	slug: string
+}
+
+interface Collection {
+	id: number
+	name: string
+	slug: string
+	entries_count?: number
+}
+
+interface Entry {
+	title: string
+	slug: string
+	status: string
+}
+
+interface Navigation {
+	name: string
+	slug: string
+	location: string
+}
+
 const results: TestResult[] = []
 
 function logResult(result: TestResult) {
@@ -80,7 +104,7 @@ async function testConnection() {
 			message: 'Successfully connected to Rush CMS API',
 			data: {
 				sites: data.data?.length || 0,
-				siteNames: data.data?.map((s: any) => s.name) || []
+				siteNames: data.data?.map((s: Site) => s.name) || []
 			}
 		})
 
@@ -106,7 +130,7 @@ async function testConnection() {
 					name: 'Collections Endpoint',
 					status: 'success',
 					message: `Found ${collectionsData.data?.length || 0} collections`,
-					data: collectionsData.data?.map((c: any) => ({
+					data: collectionsData.data?.map((c: Collection) => ({
 						name: c.name,
 						slug: c.slug,
 						entries: c.entries_count || 0
@@ -134,7 +158,7 @@ async function testConnection() {
 							name: 'Entries Endpoint',
 							status: 'success',
 							message: `Found ${entriesData.data?.length || 0} entries in "${collection.name}"`,
-							data: entriesData.data?.slice(0, 3).map((e: any) => ({
+							data: entriesData.data?.slice(0, 3).map((e: Entry) => ({
 								title: e.title,
 								slug: e.slug,
 								status: e.status
@@ -174,7 +198,7 @@ async function testConnection() {
 					name: 'Navigations Endpoint',
 					status: 'success',
 					message: `Found ${navsData.data?.length || 0} navigations`,
-					data: navsData.data?.map((n: any) => ({
+					data: navsData.data?.map((n: Navigation) => ({
 						name: n.name,
 						slug: n.slug,
 						location: n.location

@@ -53,15 +53,17 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
 	const { slug } = await params
 
+	let entry
+
 	try {
-		const entry = await getEntryByCollectionAndSlug<BlogEntryData>(config.site.slug, 'blog', slug)
-
-		if (!entry) {
-			notFound()
-		}
-
-		return <Article entry={entry} />
+		entry = await getEntryByCollectionAndSlug<BlogEntryData>(config.site.slug, 'blog', slug)
 	} catch {
 		notFound()
 	}
+
+	if (!entry) {
+		notFound()
+	}
+
+	return <Article entry={entry} />
 }

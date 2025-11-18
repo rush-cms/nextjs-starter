@@ -5,7 +5,7 @@
 if (process.env.NODE_ENV === 'development' && typeof window !== 'undefined') {
 	const originalError = console.error
 
-	console.error = (...args: any[]) => {
+	console.error = (...args: unknown[]) => {
 		const errorMessage = args[0]?.toString() || ''
 
 		// Suppress React 19 performance measurement error

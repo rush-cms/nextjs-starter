@@ -2,20 +2,19 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { logger } from '../logger'
 
 describe('Logger', () => {
-	let consoleErrorSpy: any
-	let consoleWarnSpy: any
-	let consoleLogSpy: any
-	const originalEnv = process.env.NODE_ENV
+	let consoleErrorSpy: ReturnType<typeof vi.spyOn>
+	let consoleWarnSpy: ReturnType<typeof vi.spyOn>
+	let consoleLogSpy: ReturnType<typeof vi.spyOn>
 
 	beforeEach(() => {
-		process.env.NODE_ENV = 'development'
+		vi.stubEnv('NODE_ENV', 'development')
 		consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 		consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
 		consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 	})
 
 	afterEach(() => {
-		process.env.NODE_ENV = originalEnv
+		vi.unstubAllEnvs()
 		vi.restoreAllMocks()
 	})
 
@@ -24,7 +23,7 @@ describe('Logger', () => {
 		expect(consoleErrorSpy).toHaveBeenCalled()
 		const callArgs = consoleErrorSpy.mock.calls[0]
 		expect(callArgs[0]).toContain('[ERROR]')
-		expect(callArgs[1]).toContain('Test error')
+		expect(callArgs[0]).toContain('Test error')
 	})
 
 	it('should log warning messages', () => {
@@ -32,7 +31,7 @@ describe('Logger', () => {
 		expect(consoleWarnSpy).toHaveBeenCalled()
 		const callArgs = consoleWarnSpy.mock.calls[0]
 		expect(callArgs[0]).toContain('[WARN]')
-		expect(callArgs[1]).toContain('Test warning')
+		expect(callArgs[0]).toContain('Test warning')
 	})
 
 	it('should log info messages', () => {

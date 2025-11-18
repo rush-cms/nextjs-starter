@@ -5,7 +5,6 @@ import { BlogSearch } from '@/components/search/blog-search'
 import { Pagination } from '@/components/pagination/pagination'
 import { formatDate } from '@/lib/date'
 import type { RushCMSEntry, BlogEntryData } from '@/types/rush-cms'
-import { useState, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 
 interface BlogListingProps {
@@ -15,12 +14,7 @@ interface BlogListingProps {
 
 export function BlogListing({ entries, itemsPerPage = 9 }: BlogListingProps) {
 	const searchParams = useSearchParams()
-	const [currentPage, setCurrentPage] = useState(1)
-
-	useEffect(() => {
-		const page = Number(searchParams.get('page')) || 1
-		setCurrentPage(page)
-	}, [searchParams])
+	const currentPage = Number(searchParams.get('page')) || 1
 
 	return (
 		<BlogSearch<BlogEntryData>

@@ -119,6 +119,8 @@ export function RichTextBlock({ data }: BlockRendererProps) {
 		return null
 	}
 
+	let tipTapContent
+
 	try {
 		const content = typeof blockData.content === 'string'
 			? JSON.parse(blockData.content)
@@ -128,21 +130,21 @@ export function RichTextBlock({ data }: BlockRendererProps) {
 			return null
 		}
 
-		const tipTapContent = content as { type: string; content?: TipTapNode[] }
+		tipTapContent = content as { type: string; content?: TipTapNode[] }
 
 		if (!tipTapContent.content || !Array.isArray(tipTapContent.content)) {
 			return null
 		}
-
-		return (
-			<div className='prose prose-lg max-w-none'>
-				{tipTapContent.content.map((node, index) => renderNode(node, index))}
-			</div>
-		)
 	} catch (error) {
 		if (process.env.NODE_ENV !== 'production') {
 			console.error('[Rush CMS] Failed to parse richtext content:', error)
 		}
 		return null
 	}
+
+	return (
+		<div className='prose prose-lg max-w-none'>
+			{tipTapContent.content.map((node, index) => renderNode(node, index))}
+		</div>
+	)
 }

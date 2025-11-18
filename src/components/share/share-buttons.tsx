@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Facebook, Twitter, Linkedin, Mail, Link2, Check } from 'lucide-react'
 
 interface ShareButtonsProps {
@@ -19,11 +19,7 @@ export function ShareButtons({
 	showLabels = true
 }: ShareButtonsProps) {
 	const [copied, setCopied] = useState(false)
-	const [hasNativeShare, setHasNativeShare] = useState(false)
-
-	useEffect(() => {
-		setHasNativeShare(typeof navigator !== 'undefined' && typeof navigator.share !== 'undefined')
-	}, [])
+	const hasNativeShare = typeof navigator !== 'undefined' && typeof navigator.share !== 'undefined'
 
 	const encodedUrl = encodeURIComponent(url)
 	const encodedTitle = encodeURIComponent(title)

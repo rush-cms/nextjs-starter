@@ -1,10 +1,14 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import type { RushCMSEntry } from '@/types/rush-cms'
+import type { RushCMSEntry, RushCMSCategory } from '@/types/rush-cms'
 import { getImageProps } from '@/lib/utils'
 
+interface EntryData extends Record<string, unknown> {
+	category?: RushCMSCategory
+}
+
 interface EntryCardProps {
-	entry: RushCMSEntry
+	entry: RushCMSEntry<EntryData>
 	formatDate: (dateString: string) => string
 	headingLevel?: 'h2' | 'h3'
 	imageHeight?: string
@@ -21,7 +25,7 @@ export function EntryCard({
 	basePath = '/blog'
 }: EntryCardProps) {
 	const category = entry.data.category
-	const image = getImageProps(entry.data.featured_image, entry.data.title)
+	const image = getImageProps(entry.featured_image || undefined, entry.title)
 
 	const HeadingTag = headingLevel
 
@@ -30,9 +34,9 @@ export function EntryCard({
 			<Link
 				href={`${basePath}/${entry.slug}`}
 				className='absolute inset-0 z-10'
-				aria-label={`Leia o artigo: ${entry.data.title}`}
+				aria-label={`Leia o artigo: ${entry.title}`}
 			>
-				<span className='sr-only'>Ler artigo: {entry.data.title}</span>
+				<span className='sr-only'>Ler artigo: {entry.title}</span>
 			</Link>
 
 			{image && (
@@ -58,12 +62,12 @@ export function EntryCard({
 				)}
 
 				<HeadingTag className='text-xl sm:text-2xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors'>
-					{entry.data.title}
+					{entry.title}
 				</HeadingTag>
 
-				{entry.data.excerpt && (
+				{entry.excerpt && (
 					<p className='text-sm sm:text-base text-gray-600 mb-4 line-clamp-3'>
-						{entry.data.excerpt}
+						{entry.excerpt}
 					</p>
 				)}
 

@@ -6,7 +6,7 @@ import { CollectionSection } from '@/components/home/collection-section'
 import type { BlogEntryData } from '@/types/rush-cms'
 
 export default async function HomePage() {
-	let collectionsWithEntries: Array<{
+	const collectionsWithEntries: Array<{
 		collection: Awaited<ReturnType<typeof getCollections>>[0]
 		entries: Awaited<ReturnType<typeof getEntriesByCollection<BlogEntryData>>>
 	}> = []

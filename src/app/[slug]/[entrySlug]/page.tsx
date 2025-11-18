@@ -79,19 +79,21 @@ export async function generateMetadata({ params }: EntryPageProps): Promise<Meta
 export default async function EntryPage({ params }: EntryPageProps) {
 	const { slug, entrySlug } = await params
 
+	let entry
+
 	try {
-		const entry = await getEntryByCollectionAndSlug<BlogEntryData>(
+		entry = await getEntryByCollectionAndSlug<BlogEntryData>(
 			config.site.slug,
 			slug,
 			entrySlug
 		)
-
-		if (!entry) {
-			notFound()
-		}
-
-		return <Article entry={entry} basePath={`/${slug}`} />
 	} catch {
 		notFound()
 	}
+
+	if (!entry) {
+		notFound()
+	}
+
+	return <Article entry={entry} basePath={`/${slug}`} />
 }

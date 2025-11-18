@@ -4,9 +4,6 @@ interface LogData {
 	[key: string]: unknown
 }
 
-const isDevelopment = process.env.NODE_ENV === 'development'
-const isProduction = process.env.NODE_ENV === 'production'
-
 function formatMessage(level: LogLevel, message: string, data?: LogData): string {
 	const timestamp = new Date().toISOString()
 	const prefix = `[${timestamp}] [${level.toUpperCase()}]`
@@ -20,21 +17,21 @@ function formatMessage(level: LogLevel, message: string, data?: LogData): string
 
 export const logger = {
 	info(message: string, data?: LogData): void {
-		if (isDevelopment) {
+		if (process.env.NODE_ENV === 'development') {
 			console.log(formatMessage('info', message, data))
 		}
 	},
 
 	warn(message: string, data?: LogData): void {
-		if (isDevelopment) {
+		if (process.env.NODE_ENV === 'development') {
 			console.warn(formatMessage('warn', message, data))
 		}
 	},
 
 	error(message: string, data?: LogData): void {
-		if (isDevelopment) {
+		if (process.env.NODE_ENV === 'development') {
 			console.error(formatMessage('error', message, data))
-		} else if (isProduction) {
+		} else if (process.env.NODE_ENV === 'production') {
 			console.error(formatMessage('error', message, { ...data, stack: undefined }))
 		}
 	}

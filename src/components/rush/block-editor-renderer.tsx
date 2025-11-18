@@ -84,7 +84,7 @@ function QuoteBlock({ data }: { data: Record<string, unknown> }) {
 	return (
 		<blockquote className='my-6 sm:my-8 px-4 sm:px-6 py-4 sm:py-5 border-l-4 border-blue-600 bg-blue-50 rounded-r-lg'>
 			<p className='text-base sm:text-lg md:text-xl text-gray-800 italic leading-relaxed'>
-				"{text}"
+				&ldquo;{text}&rdquo;
 			</p>
 			{author && (
 				<cite className='block mt-3 sm:mt-4 text-sm sm:text-base text-gray-600 not-italic font-medium'>

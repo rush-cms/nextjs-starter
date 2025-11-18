@@ -80,7 +80,7 @@ export default async function TagPage({ params }: TagPageProps) {
 							{tagName}
 						</div>
 						<h1 className='text-3xl sm:text-4xl lg:text-5xl font-bold mb-4'>
-							Conteúdos com a tag "{tagName}"
+							Conteúdos com a tag &ldquo;{tagName}&rdquo;
 						</h1>
 						<p className='text-lg sm:text-xl text-blue-100'>
 							{entries.length} {entries.length === 1 ? 'conteúdo encontrado' : 'conteúdos encontrados'}
@@ -123,7 +123,7 @@ export default async function TagPage({ params }: TagPageProps) {
 							Nenhum conteúdo encontrado
 						</h2>
 						<p className='text-gray-600 mb-6'>
-							Ainda não há conteúdos com a tag "{tagName}"
+							Ainda não há conteúdos com a tag &ldquo;{tagName}&rdquo;
 						</p>
 						<Link
 							href='/blog'

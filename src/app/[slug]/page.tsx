@@ -101,43 +101,45 @@ export default async function DynamicPage({ params }: DynamicPageProps) {
 	const collection = await isCollection(slug)
 
 	if (collection) {
+		let entries
+
 		try {
-			const entries = await getEntriesByCollection<BlogEntryData>(
+			entries = await getEntriesByCollection<BlogEntryData>(
 				config.site.slug,
 				collection.slug,
 				{ status: 'published' }
-			)
-
-			const collectionName = collection.name || collection.slug.charAt(0).toUpperCase() + collection.slug.slice(1)
-
-			return (
-				<div className='w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16'>
-					<Breadcrumbs items={[{ label: collectionName }]} />
-
-					<div className='mb-8 sm:mb-12'>
-						<h1 className='text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 sm:mb-4'>
-							{collectionName}
-						</h1>
-						{collection.description && (
-							<p className='text-base sm:text-lg text-gray-600'>
-								{collection.description}
-							</p>
-						)}
-					</div>
-
-					{entries.length === 0 ? (
-						<div className='text-center py-12 sm:py-16'>
-							<p className='text-lg text-gray-600'>No published entries yet.</p>
-						</div>
-					) : (
-						<BlogListing entries={entries} itemsPerPage={9} />
-					)}
-				</div>
 			)
 		} catch (error) {
 			console.error(`Failed to fetch entries for collection ${slug}:`, error)
 			notFound()
 		}
+
+		const collectionName = collection.name || collection.slug.charAt(0).toUpperCase() + collection.slug.slice(1)
+
+		return (
+			<div className='w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16'>
+				<Breadcrumbs items={[{ label: collectionName }]} />
+
+				<div className='mb-8 sm:mb-12'>
+					<h1 className='text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 sm:mb-4'>
+						{collectionName}
+					</h1>
+					{collection.description && (
+						<p className='text-base sm:text-lg text-gray-600'>
+							{collection.description}
+						</p>
+					)}
+				</div>
+
+				{entries.length === 0 ? (
+					<div className='text-center py-12 sm:py-16'>
+						<p className='text-lg text-gray-600'>No published entries yet.</p>
+					</div>
+				) : (
+					<BlogListing entries={entries} itemsPerPage={9} />
+				)}
+			</div>
+		)
 	}
 
 	const rootCollectionSlug = config.routing.rootCollectionSlug
@@ -145,19 +147,21 @@ export default async function DynamicPage({ params }: DynamicPageProps) {
 		notFound()
 	}
 
+	let entry
+
 	try {
-		const entry = await getEntryByCollectionAndSlug<BlogEntryData>(
+		entry = await getEntryByCollectionAndSlug<BlogEntryData>(
 			config.site.slug,
 			rootCollectionSlug,
 			slug
 		)
-
-		if (!entry) {
-			notFound()
-		}
-
-		return <Article entry={entry} />
 	} catch {
 		notFound()
 	}
+
+	if (!entry) {
+		notFound()
+	}
+
+	return <Article entry={entry} />
 }
