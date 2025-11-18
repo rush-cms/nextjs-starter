@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { IMAGE_SIZES, RATE_LIMIT, CACHE_TIMES } from '../constants'
+import { IMAGE_SIZES, RATE_LIMIT, CACHE_TIMES } from './constants'
 
 describe('Constants', () => {
 	describe('IMAGE_SIZES', () => {
