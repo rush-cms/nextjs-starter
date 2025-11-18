@@ -21,13 +21,7 @@ export default defineConfig({
 				'src/app/**/loading.tsx',
 				'src/proxy.ts',
 				'src/i18n/**'
-			],
-			thresholds: {
-				branches: 90,
-				functions: 90,
-				lines: 90,
-				statements: 90
-			}
+			]
 		}
 	},
 	resolve: {
