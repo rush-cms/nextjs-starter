@@ -4,6 +4,8 @@ import { timingSafeEqual } from 'crypto'
 import { config } from '@/lib/config'
 import { logger } from '@/lib/logger'
 
+export const runtime = 'edge'
+
 interface RevalidateRequestBody {
 	secret?: string
 	path?: string

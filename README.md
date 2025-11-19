@@ -1,6 +1,25 @@
 # Next.js Rush CMS Starter
 
+[![CI/CD](https://github.com/rush-cms/nextjs-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/rush-cms/nextjs-starter/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org/)
+
 A modern, production-ready Next.js 16 starter template for [Rush CMS](https://rushcms.com) - a powerful Laravel-based headless CMS.
+
+## 🚀 Quick Deploy
+
+Deploy your own Rush CMS site in minutes:
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/rush-cms/nextjs-starter&env=NEXT_PUBLIC_API_URL,API_TOKEN,SITE_SLUG,SITE_ID,BLOG_COLLECTION_ID,PAGES_COLLECTION_ID,NAVIGATION_ID,CONTACT_FORM_KEY,REVALIDATE_SECRET,NEXT_PUBLIC_S3_URL,NEXT_PUBLIC_SITE_NAME,NEXT_PUBLIC_SITE_URL&envDescription=Rush%20CMS%20Configuration&envLink=https://github.com/rush-cms/nextjs-starter/blob/main/.env.example&project-name=my-rush-cms-site&repository-name=my-rush-cms-site)
+
+**Or use as GitHub Template:**
+
+1. Click **Use this template** button above
+2. Clone your new repository
+3. Install dependencies: `pnpm install`
+4. Copy `.env.example` to `.env` and configure
+5. Run locally: `pnpm dev`
 
 ## Features
 
