@@ -1,10 +1,7 @@
 import { revalidatePath, revalidateTag } from 'next/cache'
 import { NextRequest, NextResponse } from 'next/server'
-import { timingSafeEqual } from 'crypto'
 import { config } from '@/lib/config'
 import { logger } from '@/lib/logger'
-
-export const runtime = 'edge'
 
 interface RevalidateRequestBody {
 	secret?: string
@@ -23,10 +20,16 @@ const securityHeaders = {
 function secureCompare(a: string, b: string): boolean {
 	if (a.length !== b.length) return false
 
-	const bufA = Buffer.from(a, 'utf8')
-	const bufB = Buffer.from(b, 'utf8')
+	const encoder = new TextEncoder()
+	const bufA = encoder.encode(a)
+	const bufB = encoder.encode(b)
 
-	return timingSafeEqual(bufA, bufB)
+	let result = 0
+	for (let i = 0; i < bufA.length; i++) {
+		result |= bufA[i] ^ bufB[i]
+	}
+
+	return result === 0
 }
 
 const rateLimitMap = new Map<string, number[]>()

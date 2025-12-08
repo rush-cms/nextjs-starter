@@ -34,12 +34,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 			status: 'published'
 		})
 
-		blogPages = entries.map((entry) => ({
-			url: `${baseUrl}/blog/${entry.slug}`,
-			lastModified: new Date(entry.updated_at),
-			changeFrequency: 'weekly' as const,
-			priority: 0.7
-		}))
+		blogPages = entries.map((entry) => {
+			const lastModified = entry.updated_at || entry.published_at
+			const date = lastModified ? new Date(lastModified) : new Date()
+
+			return {
+				url: `${baseUrl}/blog/${entry.slug}`,
+				lastModified: isNaN(date.getTime()) ? new Date() : date,
+				changeFrequency: 'weekly' as const,
+				priority: 0.7
+			}
+		})
 	} catch (error) {
 		console.error('Failed to fetch blog entries for sitemap:', error)
 	}

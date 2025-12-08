@@ -4,6 +4,8 @@ import { config } from '@/lib/config'
 import { generatePageMetadata } from '@/lib/metadata'
 import type { Metadata } from 'next'
 
+export const dynamic = 'force-dynamic'
+
 export async function generateMetadata(): Promise<Metadata> {
 	const siteName = await getSiteName(config.site.slug, config.site.name)
 

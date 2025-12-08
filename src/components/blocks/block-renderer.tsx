@@ -1,21 +1,46 @@
-import { getBlockRenderer } from './index'
-import type { BlockData } from '@/types/rush-cms'
+'use client'
+
+import { BlocksRenderer } from '@rushcms/react'
+import type { Block } from '@rushcms/types'
 
 interface BlockRendererProps {
-	blocks: BlockData[]
+	blocks?: Block[] | unknown
+	className?: string
 }
 
-export function BlockRenderer({ blocks }: BlockRendererProps) {
-	if (!blocks || blocks.length === 0) {
+export function BlockRenderer({ blocks, className }: BlockRendererProps) {
+	if (!blocks) {
 		return null
 	}
 
-	return (
-		<div className='space-y-0'>
-			{blocks.map((block, index) => {
-				const BlockComponent = getBlockRenderer(block.type)
-				return <BlockComponent key={index} type={block.type} data={block.data} />
-			})}
-		</div>
-	)
+	if (!Array.isArray(blocks)) {
+		return null
+	}
+
+	if (blocks.length === 0) {
+		return null
+	}
+
+	const validBlocks = blocks.filter((block): block is Block => {
+		if (!block || typeof block !== 'object') {
+			return false
+		}
+
+		const blockObj = block as { type?: unknown; data?: unknown }
+		if (!blockObj.type || typeof blockObj.type !== 'string') {
+			return false
+		}
+
+		if (!blockObj.data || typeof blockObj.data !== 'object') {
+			return false
+		}
+
+		return true
+	})
+
+	if (validBlocks.length === 0) {
+		return null
+	}
+
+	return <BlocksRenderer blocks={validBlocks} className={className} />
 }

@@ -2,6 +2,8 @@ import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
 	reactStrictMode: true,
+	transpilePackages: ['@rushcms/client', '@rushcms/react', '@rushcms/types'],
+	turbopack: {},
 	images: {
 		remotePatterns: [
 			{

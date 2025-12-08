@@ -126,11 +126,9 @@ export function Article({ entry, showStructuredData = true, showBreadcrumbs = tr
 				/>
 			</div>
 
-			{content && content.length > 0 && (
-				<div className='mb-8'>
-					<BlockRenderer blocks={content} />
-				</div>
-			)}
+			<div className='mb-8'>
+				<BlockRenderer blocks={content} />
+			</div>
 
 			{tags && tags.length > 0 && (
 				<div className='flex flex-wrap gap-2 mt-8 sm:mt-10 lg:mt-12 pt-6 sm:pt-8 border-t border-gray-200'>
