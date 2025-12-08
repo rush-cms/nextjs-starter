@@ -120,3 +120,38 @@
     @apply bg-background text-foreground;
   }
 }
+
+.code-block {
+	background-color: #1e1e1e;
+}
+
+.code-block-header {
+	background-color: #2d2d2d;
+}
+
+.code-block-filename {
+	color: #d4d4d4;
+}
+
+.code-block-language {
+	background-color: #3e3e3e;
+	color: #4fc3f7;
+}
+
+.code-block-content,
+.code-block-content pre {
+	background-color: #1e1e1e;
+}
+
+.code-line-number {
+	color: #858585;
+}
+
+.code-line-text,
+.code-text {
+	color: #d4d4d4;
+}
+
+.code-line-highlighted {
+	background-color: #264f78;
+}
