@@ -8,6 +8,7 @@ import type {
 	RushCMSForm,
 	RushCMSSite,
 	RushCMSTag,
+	RushCMSLinkPage,
 	GetEntriesParams,
 	FetchAPIOptions,
 	RushCMSError as RushCMSErrorType,
@@ -287,6 +288,38 @@ export async function getEntriesByTag<T = Record<string, unknown>>(
 	)
 
 	return response.data
+}
+
+export async function getLinkPages(siteSlug: string): Promise<RushCMSLinkPage[]> {
+	try {
+		const response = await rushcmsClient.getLinkPages()
+		return response.data
+	} catch (error) {
+		if (error instanceof SDKError) {
+			throw new RushCMSError(
+				error.message,
+				error.statusCode,
+				'/linkpages'
+			)
+		}
+		throw error
+	}
+}
+
+export async function getLinkPage(siteSlug: string, key: string): Promise<RushCMSLinkPage> {
+	try {
+		const linkPage = await rushcmsClient.getLinkPage(key)
+		return linkPage as RushCMSLinkPage
+	} catch (error) {
+		if (error instanceof SDKError) {
+			throw new RushCMSError(
+				error.message,
+				error.statusCode,
+				`/linkpages/${key}`
+			)
+		}
+		throw error
+	}
 }
 
 export function getAnalyticsScriptUrl(siteSlug: string): string {

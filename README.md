@@ -102,6 +102,9 @@ PAGES_COLLECTION_ID=2
 NAVIGATION_KEY=main-menu
 CONTACT_FORM_KEY=contact
 
+# LinkPages (optional - Linktree clone)
+LINKPAGE_KEY=your-linkpage-key
+
 # Revalidation (required)
 REVALIDATE_SECRET=generate-a-random-secret
 REVALIDATE_TIME=1800

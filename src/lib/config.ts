@@ -50,6 +50,9 @@ export const config = {
 	forms: {
 		contact: process.env.CONTACT_FORM_KEY || 'contact'
 	},
+	linkPages: {
+		default: process.env.LINKPAGE_KEY || undefined
+	},
 	media: {
 		s3Url: process.env.NEXT_PUBLIC_S3_URL,
 		bucket: process.env.NEXT_PUBLIC_S3_BUCKET

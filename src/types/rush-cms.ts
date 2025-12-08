@@ -1,6 +1,76 @@
-export interface RushCMSAuthor {
-	name: string
-}
+// ============================================================================
+// RushCMS Types - Migrated to use @rushcms/types SDK
+// ============================================================================
+// This file now imports types from the official SDK and creates aliases
+// for backward compatibility with existing code.
+// ============================================================================
+
+// Import SDK types
+import type {
+	Entry,
+	Author,
+	FeaturedImage,
+	Tag,
+	EntryMeta,
+	Block,
+	PaginatedResponse,
+	PaginationMeta,
+	PaginationLinks,
+	RichTextBlock,
+	CalloutBlock,
+	ToggleBlock,
+	QuoteBlock,
+	ImageBlock,
+	GalleryBlock,
+	VideoBlock,
+	YoutubeBlock,
+	EmbedBlock,
+	BookmarkBlock,
+	AlertBlock,
+	DividerBlock,
+	CodeBlock,
+	ColumnsBlock,
+	ButtonBlock
+} from '@rushcms/types'
+
+// ============================================================================
+// Type Aliases for Backward Compatibility
+// ============================================================================
+
+// Core Types
+export type RushCMSAuthor = Author
+export type RushCMSImage = FeaturedImage
+export type RushCMSTag = Tag
+export type RushCMSEntryMeta = EntryMeta
+export type RushCMSEntry<T = Record<string, unknown>> = Entry & { data: T }
+export type RushCMSPaginationMeta = PaginationMeta
+export type RushCMSPaginationLinks = PaginationLinks
+export type RushCMSPaginatedResponse<T> = PaginatedResponse<T>
+
+// Block Types - Using SDK types
+export type BaseBlockData = Block
+export type RichTextBlockData = RichTextBlock
+export type CalloutBlockData = CalloutBlock
+export type ToggleBlockData = ToggleBlock
+export type QuoteBlockData = QuoteBlock
+export type ImageBlockData = ImageBlock
+export type GalleryBlockData = GalleryBlock
+export type VideoBlockData = VideoBlock
+export type YoutubeBlockData = YoutubeBlock
+export type EmbedBlockData = EmbedBlock
+export type BookmarkBlockData = BookmarkBlock
+export type AlertBlockData = AlertBlock
+export type DividerBlockData = DividerBlock
+export type CodeBlockData = CodeBlock
+export type ColumnsBlockData = ColumnsBlock
+export type ButtonBlockData = ButtonBlock
+export type BlockData = Block
+
+// ============================================================================
+// Custom Types (Not in SDK)
+// ============================================================================
+
+export type EntryStatus = 'published' | 'draft' | 'archived' | 'scheduled'
 
 export interface RushCMSCollection {
 	id: number
@@ -16,88 +86,10 @@ export interface RushCMSCollection {
 	entries_count?: number
 }
 
-export interface RushCMSImage {
-	id: number
-	name: string
-	file_name: string
-	mime_type: string
-	size: number
-	url: string
-	thumb?: string
-	preview?: string
-	alt?: string
-	responsive?: {
-		thumb?: string
-		medium?: string
-		large?: string
-	}
-}
-
 export interface RushCMSCategory {
 	id: number
 	name: string
 	slug: string
-}
-
-export interface RushCMSTag {
-	id: number
-	name: string
-	slug: string
-}
-
-export interface RushCMSEntryMeta {
-	seo_title?: string
-	seo_description?: string
-	seo_keywords?: string
-	og_title?: string
-	og_description?: string
-	og_image?: string
-	views?: number
-	[key: string]: unknown
-}
-
-export type EntryStatus = 'published' | 'draft' | 'archived' | 'scheduled'
-
-export interface RushCMSEntry<T = Record<string, unknown>> {
-	id: number
-	site_id?: number
-	collection_id?: number
-	author: RushCMSAuthor
-	title: string
-	slug: string
-	excerpt: string
-	featured_image?: RushCMSImage | null
-	data: T
-	status: EntryStatus
-	published_at: string
-	expires_at?: string | null
-	meta: RushCMSEntryMeta
-	created_at: string
-	updated_at: string
-	collection?: RushCMSCollection
-	tags?: RushCMSTag[]
-}
-
-export interface RushCMSPaginationMeta {
-	current_page: number
-	from: number
-	last_page: number
-	per_page: number
-	to: number
-	total: number
-}
-
-export interface RushCMSPaginationLinks {
-	first: string
-	last: string
-	prev: string | null
-	next: string | null
-}
-
-export interface RushCMSPaginatedResponse<T> {
-	data: T[]
-	meta: RushCMSPaginationMeta
-	links: RushCMSPaginationLinks
 }
 
 export interface RushCMSResponse<T> {
@@ -187,18 +179,6 @@ export interface RushCMSErrorResponse {
 	errors?: Record<string, string[]>
 }
 
-export class RushCMSError extends Error {
-	constructor(
-		message: string,
-		public status?: number,
-		public endpoint?: string,
-		public errors?: Record<string, string[]>
-	) {
-		super(message)
-		this.name = 'RushCMSError'
-	}
-}
-
 export interface GetEntriesParams {
 	collection?: string
 	status?: EntryStatus
@@ -216,189 +196,88 @@ export interface FetchAPIOptions {
 	tags?: string[]
 }
 
-// Block Types
-export interface BaseBlockData {
-	type: string
-	data: Record<string, unknown>
+export type LinkDisplayMode = 'icon_text' | 'icon_only' | 'text_only'
+
+export interface RushCMSLinkPageLink {
+	title: string
+	url: string
+	icon?: string
+	display_mode?: LinkDisplayMode
 }
 
-export interface RichTextBlockData extends BaseBlockData {
-	type: 'richtext'
-	data: {
-		content: unknown
+export interface RushCMSLinkPageSocialLink {
+	platform: string
+	url: string
+	icon?: string
+}
+
+export interface RushCMSLinkPageSettings {
+	theme?: 'light' | 'dark' | 'auto'
+	background_color?: string
+	text_color?: string
+	button_style?: 'rounded' | 'square' | 'pill'
+	show_avatar?: boolean
+	show_description?: boolean
+}
+
+export interface RushCMSLinkPage {
+	id: number
+	key: string
+	title: string
+	description?: string
+	avatar?: string
+	links: RushCMSLinkPageLink[]
+	social_links: RushCMSLinkPageSocialLink[]
+	settings: RushCMSLinkPageSettings
+}
+
+// ============================================================================
+// Error Class (Using SDK errors)
+// ============================================================================
+
+import {
+	RushCMSError as SDKError,
+	RushCMSNotFoundError,
+	RushCMSUnauthorizedError,
+	RushCMSForbiddenError
+} from '@rushcms/client'
+
+export class RushCMSError extends SDKError {
+	constructor(
+		message: string,
+		public status?: number,
+		public endpoint?: string,
+		public errors?: Record<string, string[]>
+	) {
+		super(message, status)
+		this.name = 'RushCMSError'
 	}
 }
 
-export interface ImageBlockData extends BaseBlockData {
-	type: 'image'
-	data: {
-		image?: RushCMSImage
-		caption?: string
-		alt?: string
-		alignment?: 'left' | 'center' | 'right'
-	}
+export {
+	RushCMSNotFoundError,
+	RushCMSUnauthorizedError,
+	RushCMSForbiddenError
 }
 
-export interface GalleryBlockData extends BaseBlockData {
-	type: 'gallery'
-	data: {
-		images: RushCMSImage[]
-		columns?: number
-		caption?: string
-	}
-}
-
-export interface VideoBlockData extends BaseBlockData {
-	type: 'video'
-	data: {
-		url: string
-		caption?: string
-		poster?: string
-		autoplay?: boolean
-	}
-}
-
-export interface YoutubeBlockData extends BaseBlockData {
-	type: 'youtube'
-	data: {
-		url: string
-		video_id?: string
-		title?: string
-		caption?: string
-	}
-}
-
-export interface QuoteBlockData extends BaseBlockData {
-	type: 'quote'
-	data: {
-		content: string
-		author?: string
-		cite?: string
-	}
-}
-
-export interface CalloutBlockData extends BaseBlockData {
-	type: 'callout'
-	data: {
-		content: string
-		type?: 'info' | 'warning' | 'success' | 'error'
-		title?: string
-	}
-}
-
-export interface AlertBlockData extends BaseBlockData {
-	type: 'alert'
-	data: {
-		content: string
-		type: 'info' | 'warning' | 'error' | 'success'
-		title?: string
-	}
-}
-
-export interface CodeBlockData extends BaseBlockData {
-	type: 'code'
-	data: {
-		code: string
-		language?: string
-		filename?: string
-	}
-}
-
-export interface DividerBlockData extends BaseBlockData {
-	type: 'divider'
-	data: {
-		style?: 'solid' | 'dashed' | 'dotted' | 'double'
-	}
-}
-
-export interface ButtonBlockData extends BaseBlockData {
-	type: 'button'
-	data: {
-		text: string
-		url: string
-		variant?: 'primary' | 'secondary' | 'outline' | 'ghost'
-		size?: 'sm' | 'md' | 'lg'
-		target?: '_self' | '_blank'
-		openInNewTab?: boolean
-	}
-}
-
-export interface ColumnsBlockData extends BaseBlockData {
-	type: 'columns'
-	data: {
-		columns: Array<{
-			content: BaseBlockData[]
-		}>
-	}
-}
-
-export interface ToggleBlockData extends BaseBlockData {
-	type: 'toggle'
-	data: {
-		title: string
-		content: string
-	}
-}
-
-export interface EmbedBlockData extends BaseBlockData {
-	type: 'embed'
-	data: {
-		url: string
-		html?: string
-		title?: string
-		caption?: string
-		aspectRatio?: '16/9' | '4/3' | '1/1'
-	}
-}
-
-export interface BookmarkBlockData extends BaseBlockData {
-	type: 'bookmark'
-	data: {
-		url: string
-		title?: string
-		description?: string
-		image?: string
-	}
-}
-
-export interface ParagraphBlockData extends BaseBlockData {
-	type: 'paragraph'
-	data: {
-		content: string
-	}
-}
-
-export type BlockData =
-	| RichTextBlockData
-	| ImageBlockData
-	| GalleryBlockData
-	| VideoBlockData
-	| YoutubeBlockData
-	| QuoteBlockData
-	| CalloutBlockData
-	| AlertBlockData
-	| CodeBlockData
-	| DividerBlockData
-	| ButtonBlockData
-	| ColumnsBlockData
-	| ToggleBlockData
-	| EmbedBlockData
-	| BookmarkBlockData
-	| ParagraphBlockData
-	| BaseBlockData
+// ============================================================================
+// Props Types
+// ============================================================================
 
 export interface BaseBlockProps {
 	type: string
 	data: Record<string, unknown>
 }
 
+// ============================================================================
 // Blog Entry Types
+// ============================================================================
+
 export interface BlogEntryData extends Record<string, unknown> {
-	content?: BlockData[]
+	content?: Block[]
 	categories?: string[]
 	tags?: string[]
 }
 
 export type BlogEntry = RushCMSEntry<BlogEntryData>
 export type AnyEntry = RushCMSEntry<Record<string, unknown>>
-
