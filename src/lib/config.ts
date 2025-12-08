@@ -45,7 +45,7 @@ export const config = {
 		revalidateSecret: process.env.REVALIDATE_SECRET
 	},
 	navigation: {
-		main: parseInt(process.env.NAVIGATION_ID || '1')
+		main: process.env.NAVIGATION_KEY || 'main-menu'
 	},
 	forms: {
 		contact: process.env.CONTACT_FORM_KEY || 'contact'

@@ -13,20 +13,22 @@ import type {
 	RushCMSError as RushCMSErrorType,
 	RushCMSErrorResponse
 } from '@/types/rush-cms'
+import { rushcmsClient } from './rush-cms-sdk'
+import { RushCMSError as SDKError } from '@rushcms/client'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 const API_TOKEN = process.env.API_TOKEN
-const SITE_ID = process.env.SITE_ID || '1'
+const SITE_SLUG = process.env.SITE_SLUG || 'default'
 const REVALIDATE_TIME = parseInt(process.env.REVALIDATE_TIME || '1800')
 
-export class RushCMSError extends Error {
+export class RushCMSError extends SDKError {
 	constructor(
 		message: string,
 		public status?: number,
 		public endpoint?: string,
 		public errors?: Record<string, string[]>
 	) {
-		super(message)
+		super(message, status)
 		this.name = 'RushCMSError'
 	}
 }
@@ -50,8 +52,7 @@ async function fetchAPI<T>(
 			headers: {
 				'Authorization': `Bearer ${API_TOKEN}`,
 				'Content-Type': 'application/json',
-				'Accept': 'application/json',
-				'X-Site-ID': SITE_ID
+				'Accept': 'application/json'
 			},
 			next: {
 				revalidate,
@@ -118,15 +119,18 @@ export async function getCollection(
 	siteSlug: string,
 	collectionSlug: string
 ): Promise<RushCMSCollection> {
-	const response = await fetchAPI<RushCMSResponse<RushCMSCollection>>(
-		`/api/v1/${siteSlug}/collections/${collectionSlug}`,
-		{
-			revalidate: 3600,
-			tags: [`collection-${collectionSlug}`]
-		}
-	)
+	const collections = await getCollections(siteSlug)
+	const collection = collections.find(c => c.slug === collectionSlug)
 
-	return response.data
+	if (!collection) {
+		throw new RushCMSError(
+			`Collection with slug '${collectionSlug}' not found`,
+			404,
+			`/api/v1/${siteSlug}/collections/${collectionSlug}`
+		)
+	}
+
+	return collection
 }
 
 export async function getEntriesByCollection<T = Record<string, unknown>>(
@@ -152,25 +156,24 @@ export async function getEntries<T = Record<string, unknown>>(
 	collectionId: number,
 	params?: GetEntriesParams
 ): Promise<RushCMSEntry<T>[]> {
-	const searchParams = new URLSearchParams()
+	try {
+		const response = await rushcmsClient.getEntries(collectionId, {
+			page: params?.page,
+			per_page: params?.per_page,
+			tags: params?.tag ? [params.tag] : undefined
+		})
 
-	if (params?.status) searchParams.set('status', params.status)
-	if (params?.per_page) searchParams.set('per_page', params.per_page.toString())
-	if (params?.page) searchParams.set('page', params.page.toString())
-	if (params?.category) searchParams.set('category', params.category)
-	if (params?.tag) searchParams.set('tag', params.tag)
-	if (params?.search) searchParams.set('search', params.search)
-	if (params?.sort) searchParams.set('sort', params.sort)
-	if (params?.order) searchParams.set('order', params.order)
-
-	const queryString = searchParams.toString()
-	const endpoint = `/api/v1/${siteSlug}/collections/${collectionId}/entries${queryString ? `?${queryString}` : ''}`
-
-	const response = await fetchAPI<RushCMSResponse<RushCMSEntry<T>[]>>(endpoint, {
-		tags: ['entries-list', `collection-${collectionId}-entries`]
-	})
-
-	return response.data
+		return response.data as RushCMSEntry<T>[]
+	} catch (error) {
+		if (error instanceof SDKError) {
+			throw new RushCMSError(
+				error.message,
+				error.statusCode,
+				`/collections/${collectionId}/entries`
+			)
+		}
+		throw error
+	}
 }
 
 export async function getEntryBySlug<T = Record<string, unknown>>(
@@ -178,40 +181,62 @@ export async function getEntryBySlug<T = Record<string, unknown>>(
 	entrySlug: string,
 	collectionId: number
 ): Promise<RushCMSEntry<T>> {
-	const endpoint = `/api/v1/${siteSlug}/collections/${collectionId}/entries/${entrySlug}`
-
-	const response = await fetchAPI<RushCMSEntry<T>>(endpoint, {
-		tags: [`entry-${entrySlug}`]
-	})
-
-	return response
+	try {
+		const entry = await rushcmsClient.getEntry(collectionId, entrySlug)
+		return entry as RushCMSEntry<T>
+	} catch (error) {
+		if (error instanceof SDKError) {
+			throw new RushCMSError(
+				error.message,
+				error.statusCode,
+				`/collections/${collectionId}/entries/${entrySlug}`
+			)
+		}
+		throw error
+	}
 }
 
 export async function getNavigations(siteSlug: string): Promise<RushCMSNavigation[]> {
-	const response = await fetchAPI<RushCMSResponse<RushCMSNavigation[]>>(
-		`/api/v1/${siteSlug}/navigations`,
-		{
-			revalidate: 3600,
-			tags: ['navigations']
+	try {
+		const response = await rushcmsClient.getNavigations()
+		return response.data
+	} catch (error) {
+		if (error instanceof SDKError) {
+			throw new RushCMSError(
+				error.message,
+				error.statusCode,
+				'/navigations'
+			)
 		}
-	)
+		throw error
+	}
+}
 
-	return response.data
+export async function getNavigation(
+	siteSlug: string,
+	navigationKey: string
+): Promise<RushCMSNavigation & { items: RushCMSNavigationItem[] }> {
+	try {
+		const response = await rushcmsClient.getNavigation(navigationKey)
+		return response.data
+	} catch (error) {
+		if (error instanceof SDKError) {
+			throw new RushCMSError(
+				error.message,
+				error.statusCode,
+				`/navigations/${navigationKey}`
+			)
+		}
+		throw error
+	}
 }
 
 export async function getNavigationItems(
 	siteSlug: string,
-	navigationId: number
+	navigationKey: string
 ): Promise<RushCMSNavigationItem[]> {
-	const response = await fetchAPI<RushCMSResponse<RushCMSNavigationItem[]>>(
-		`/api/v1/${siteSlug}/navigations/${navigationId}/items`,
-		{
-			revalidate: 3600,
-			tags: [`navigation-${navigationId}-items`]
-		}
-	)
-
-	return response.data
+	const navigation = await getNavigation(siteSlug, navigationKey)
+	return navigation.items
 }
 
 export async function getForms(siteSlug: string): Promise<RushCMSForm[]> {

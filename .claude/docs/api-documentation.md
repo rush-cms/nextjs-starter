@@ -431,7 +431,7 @@ Authorization: Bearer {token}
 ### Navigations
 
 #### Listar Navegações
-Retorna todas as navegações do site com seus itens.
+Retorna todas as navegações do site.
 
 ```http
 GET /api/v1/{site-slug}/navigations
@@ -452,14 +452,12 @@ Authorization: Bearer {token}
     {
       "id": 1,
       "name": "Menu Principal",
-      "slug": "main-menu",
-      "location": "header"
+      "key": "main-menu"
     },
     {
       "id": 2,
       "name": "Footer",
-      "slug": "footer",
-      "location": "footer"
+      "key": "footer-menu"
     }
   ]
 }
@@ -469,16 +467,16 @@ Authorization: Bearer {token}
 
 ---
 
-#### Listar Itens de Navegação
-Retorna os itens de uma navegação específica.
+#### Obter Navegação Específica
+Retorna uma navegação específica com seus itens completos.
 
 ```http
-GET /api/v1/{site-slug}/navigations/{navigation-id}/items
+GET /api/v1/{site-slug}/navigations/{navigation-key}
 ```
 
 **Parâmetros de URL:**
 - `site-slug` (string, obrigatório) - Slug do site
-- `navigation-id` (integer, obrigatório) - ID da navegação
+- `navigation-key` (string, obrigatório) - Chave única da navegação
 
 **Headers:**
 ```http
@@ -488,41 +486,73 @@ Authorization: Bearer {token}
 **Resposta de Sucesso (200):**
 ```json
 {
-  "data": [
-    {
-      "title": "Home",
-      "url": "/",
-      "target": "_self"
-    },
-    {
-      "title": "Sobre",
-      "url": "/about",
-      "target": "_self"
-    },
-    {
-      "title": "Blog",
-      "url": "/blog",
-      "target": "_self"
-    },
-    {
-      "title": "Contato",
-      "url": "/contact",
-      "target": "_self"
-    }
-  ]
+  "data": {
+    "id": 1,
+    "name": "Menu Principal",
+    "key": "main-menu",
+    "items": [
+      {
+        "id": 1,
+        "title": "Home",
+        "url": "/",
+        "target": "_self",
+        "children": []
+      },
+      {
+        "id": 2,
+        "title": "Sobre",
+        "url": "/about",
+        "target": "_self",
+        "children": [
+          {
+            "id": 3,
+            "title": "Nossa História",
+            "url": "/about/history",
+            "target": "_self",
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Blog",
+        "url": "/blog",
+        "target": "_self",
+        "children": []
+      },
+      {
+        "id": 5,
+        "title": "Contato",
+        "url": "/contact",
+        "target": "_self",
+        "children": []
+      }
+    ]
+  }
 }
 ```
 
 **Campos:**
-- `title` - Texto do link
-- `url` - URL do link
-- `target` - Alvo do link (`_self`, `_blank`)
+- `id` - ID da navegação
+- `name` - Nome da navegação
+- `key` - Chave única da navegação
+- `items` - Array de itens de navegação
+  - `id` - ID do item
+  - `title` - Texto do link
+  - `url` - URL completa (pré-computada)
+  - `target` - Alvo do link (`_self`, `_blank`)
+  - `children` - Array de subitens (estrutura aninhada)
+
+**Estrutura Hierárquica:**
+Os itens podem ter subitens através do campo `children`, permitindo menus em múltiplos níveis.
 
 **Ordenação:** Os itens são retornados na ordem definida no painel (campo `order`)
 
 **Erros:**
 - `403` - Navegação não pertence ao site
 - `404` - Navegação não encontrada
+
+**Cache:** 1 hora (3600s)
 
 ---
 
@@ -876,7 +906,7 @@ onMounted(async () => {
 
 3. **Obter menu de navegação:**
    ```
-   GET /api/v1/{site}/navigations/{header-nav-id}/items
+   GET /api/v1/{site}/navigations/main-menu
    ```
 
 4. **Enviar formulário de contato:**

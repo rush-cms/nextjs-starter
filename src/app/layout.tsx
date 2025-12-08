@@ -1,8 +1,9 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
+import { Suspense } from 'react'
 import './globals.css'
 import '@/lib/suppress-dev-errors'
-import { getNavigationItems, getTeams } from '@/lib/rush-cms'
+import { getNavigation, getTeams } from '@/lib/rush-cms'
 import { Navigation } from '@/components/navigation'
 import { config } from '@/lib/config'
 import { AnalyticsScript } from '@/components/analytics/analytics-script'
@@ -50,7 +51,7 @@ export default async function RootLayout({
 	children: React.ReactNode
 }>) {
 	const locale = config.site.locale
-	let navigationItems: Awaited<ReturnType<typeof getNavigationItems>> = []
+	let navigationItems: Awaited<ReturnType<typeof getNavigation>>['items'] = []
 	let siteName = config.site.name
 
 	try {
@@ -65,7 +66,8 @@ export default async function RootLayout({
 	}
 
 	try {
-		navigationItems = await getNavigationItems(config.site.slug, config.navigation.main)
+		const navigation = await getNavigation(config.site.slug, config.navigation.main)
+		navigationItems = navigation.items
 	} catch (error) {
 		logger.error('Failed to fetch navigation', { error })
 	}
@@ -85,10 +87,12 @@ export default async function RootLayout({
 					>
 						{messages.common.skipToContent}
 					</a>
-					<AnalyticsScript
-						googleAnalyticsId={googleAnalyticsId}
-						plausibleDomain={plausibleDomain}
-					/>
+					<Suspense fallback={null}>
+						<AnalyticsScript
+							googleAnalyticsId={googleAnalyticsId}
+							plausibleDomain={plausibleDomain}
+						/>
+					</Suspense>
 					<Navigation items={navigationItems} siteName={siteName} />
 					<main id='main-content' className='min-h-screen'>
 						{children}
