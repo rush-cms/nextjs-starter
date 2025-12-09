@@ -197,10 +197,28 @@ export async function getEntryBySlug<T = Record<string, unknown>>(
 	}
 }
 
+function mapNavigationItems(items: any[]): RushCMSNavigationItem[] {
+	return items.map(item => ({
+		id: parseInt(item.id),
+		parent_id: item.parent_id ? parseInt(item.parent_id) : null,
+		title: item.title,
+		url: item.url || '#',
+		target: item.target,
+		order: item.order,
+		children: item.children ? mapNavigationItems(item.children) : []
+	}))
+}
+
 export async function getNavigations(siteSlug: string): Promise<RushCMSNavigation[]> {
 	try {
 		const response = await rushcmsClient.getNavigations()
-		return response.data
+		return response.data.map(nav => ({
+			id: nav.id,
+			name: nav.name,
+			slug: nav.key,
+			location: nav.key,
+			items: mapNavigationItems(nav.items)
+		}))
 	} catch (error) {
 		if (error instanceof SDKError) {
 			throw new RushCMSError(
@@ -219,7 +237,13 @@ export async function getNavigation(
 ): Promise<RushCMSNavigation & { items: RushCMSNavigationItem[] }> {
 	try {
 		const response = await rushcmsClient.getNavigation(navigationKey)
-		return response.data
+		return {
+			id: response.data.id,
+			name: response.data.name,
+			slug: response.data.key,
+			location: response.data.key,
+			items: mapNavigationItems(response.data.items)
+		}
 	} catch (error) {
 		if (error instanceof SDKError) {
 			throw new RushCMSError(
@@ -293,7 +317,7 @@ export async function getEntriesByTag<T = Record<string, unknown>>(
 export async function getLinkPages(siteSlug: string): Promise<RushCMSLinkPage[]> {
 	try {
 		const response = await rushcmsClient.getLinkPages()
-		return response.data
+		return response.data as RushCMSLinkPage[]
 	} catch (error) {
 		if (error instanceof SDKError) {
 			throw new RushCMSError(
@@ -308,8 +332,8 @@ export async function getLinkPages(siteSlug: string): Promise<RushCMSLinkPage[]>
 
 export async function getLinkPage(siteSlug: string, key: string): Promise<RushCMSLinkPage> {
 	try {
-		const linkPage = await rushcmsClient.getLinkPage(key)
-		return linkPage as RushCMSLinkPage
+		const response = await rushcmsClient.getLinkPage(key)
+		return response.data as RushCMSLinkPage
 	} catch (error) {
 		if (error instanceof SDKError) {
 			throw new RushCMSError(

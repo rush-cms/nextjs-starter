@@ -10,15 +10,20 @@ import { AnalyticsScript } from '@/components/analytics/analytics-script'
 import { logger } from '@/lib/logger'
 import { messages } from '@/lib/i18n/messages'
 import { SiteProvider } from '@/lib/site-context'
+import { WebVitals } from '@/components/web-vitals'
 
 const geistSans = Geist({
 	variable: '--font-geist-sans',
-	subsets: ['latin']
+	subsets: ['latin'],
+	display: 'swap',
+	preload: true
 })
 
 const geistMono = Geist_Mono({
 	variable: '--font-geist-mono',
-	subsets: ['latin']
+	subsets: ['latin'],
+	display: 'swap',
+	preload: false
 })
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -41,7 +46,34 @@ export async function generateMetadata(): Promise<Metadata> {
 			template: `%s | ${siteName}`
 		},
 		description: 'Modern website powered by Rush CMS',
-		metadataBase: new URL(config.site.url)
+		metadataBase: new URL(config.site.url),
+		openGraph: {
+			type: 'website',
+			locale: config.site.locale,
+			url: config.site.url,
+			siteName,
+			title: siteName,
+			description: 'Modern website powered by Rush CMS'
+		},
+		twitter: {
+			card: 'summary_large_image',
+			title: siteName,
+			description: 'Modern website powered by Rush CMS'
+		},
+		robots: {
+			index: true,
+			follow: true,
+			googleBot: {
+				index: true,
+				follow: true,
+				'max-video-preview': -1,
+				'max-image-preview': 'large',
+				'max-snippet': -1
+			}
+		},
+		verification: {
+			google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+		}
 	}
 }
 
@@ -69,18 +101,29 @@ export default async function RootLayout({
 		const navigation = await getNavigation(config.site.slug, config.navigation.main)
 		navigationItems = navigation.items
 	} catch (error) {
-		logger.error('Failed to fetch navigation', { error })
+		logger.warn('Navigation not configured', { error })
 	}
 
 	const googleAnalyticsId = process.env.NEXT_PUBLIC_GA_ID
 	const plausibleDomain = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN
 
+	const apiUrl = process.env.NEXT_PUBLIC_API_URL
+
 	return (
 		<html lang={locale}>
+			<head>
+				{apiUrl && (
+					<>
+						<link rel='preconnect' href={new URL(apiUrl).origin} />
+						<link rel='dns-prefetch' href={new URL(apiUrl).origin} />
+					</>
+				)}
+			</head>
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white text-gray-900`}
 			>
 				<SiteProvider name={siteName}>
+					<WebVitals />
 					<a
 						href='#main-content'
 						className='sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
@@ -93,7 +136,9 @@ export default async function RootLayout({
 							plausibleDomain={plausibleDomain}
 						/>
 					</Suspense>
-					<Navigation items={navigationItems} siteName={siteName} />
+					{navigationItems && navigationItems.length > 0 && (
+						<Navigation items={navigationItems} siteName={siteName} />
+					)}
 					<main id='main-content' className='min-h-screen'>
 						{children}
 					</main>

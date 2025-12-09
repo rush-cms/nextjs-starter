@@ -4,6 +4,9 @@ const nextConfig: NextConfig = {
 	reactStrictMode: true,
 	transpilePackages: ['@rushcms/client', '@rushcms/react', '@rushcms/types'],
 	turbopack: {},
+	compress: true,
+	poweredByHeader: false,
+	generateEtags: true,
 	images: {
 		remotePatterns: [
 			{
@@ -34,6 +37,24 @@ const nextConfig: NextConfig = {
 	},
 	async headers() {
 		return [
+			{
+				source: '/(.*)\\.(jpg|jpeg|png|gif|webp|svg|ico|woff|woff2|ttf|eot)',
+				headers: [
+					{
+						key: 'Cache-Control',
+						value: 'public, max-age=31536000, immutable'
+					}
+				]
+			},
+			{
+				source: '/_next/static/(.*)',
+				headers: [
+					{
+						key: 'Cache-Control',
+						value: 'public, max-age=31536000, immutable'
+					}
+				]
+			},
 			{
 				source: '/(.*)',
 				headers: [
