@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { LuChevronLeft, LuChevronRight } from 'react-icons/lu'
 
 interface PaginationProps {
 	currentPage: number
@@ -68,14 +68,13 @@ export function Pagination({
 			role='navigation'
 			aria-label='Pagination'
 		>
-			{/* Previous Button */}
 			{currentPage > 1 ? (
 				<Link
 					href={buildUrl(currentPage - 1)}
 					className='flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors'
 					aria-label='Previous page'
 				>
-					<ChevronLeft className='w-4 h-4' />
+					<LuChevronLeft className='w-4 h-4' />
 					<span className='hidden sm:inline'>Previous</span>
 				</Link>
 			) : (
@@ -83,12 +82,11 @@ export function Pagination({
 					className='flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-200 rounded-lg cursor-not-allowed'
 					aria-disabled='true'
 				>
-					<ChevronLeft className='w-4 h-4' />
+					<LuChevronLeft className='w-4 h-4' />
 					<span className='hidden sm:inline'>Previous</span>
 				</span>
 			)}
 
-			{/* Page Numbers */}
 			<div className='flex items-center gap-1'>
 				{pages.map((page, index) => {
 					if (page === '...') {
@@ -128,7 +126,6 @@ export function Pagination({
 				})}
 			</div>
 
-			{/* Next Button */}
 			{currentPage < totalPages ? (
 				<Link
 					href={buildUrl(currentPage + 1)}
@@ -136,7 +133,7 @@ export function Pagination({
 					aria-label='Next page'
 				>
 					<span className='hidden sm:inline'>Next</span>
-					<ChevronRight className='w-4 h-4' />
+					<LuChevronRight className='w-4 h-4' />
 				</Link>
 			) : (
 				<span
@@ -144,7 +141,7 @@ export function Pagination({
 					aria-disabled='true'
 				>
 					<span className='hidden sm:inline'>Next</span>
-					<ChevronRight className='w-4 h-4' />
+					<LuChevronRight className='w-4 h-4' />
 				</span>
 			)}
 		</nav>

@@ -3,44 +3,45 @@
 import type { LinkPage, LinkPageLink, LinkPageSocialLink } from '@rushcms/types'
 import Image from 'next/image'
 import {
-	Link as LinkIcon,
-	Globe,
-	Mail,
-	Phone,
-	MapPin,
-	ShoppingCart,
-	Camera,
-	Video,
-	Music,
-	BookOpen,
-	Newspaper,
-	GraduationCap,
-	Briefcase,
-	Heart,
-	Star,
-	Flame,
-	Sparkles,
-	MessageCircle,
-	FileText,
-	Calendar
-} from 'lucide-react'
+	LuLink as LinkIcon,
+	LuGlobe as Globe,
+	LuMail as Mail,
+	LuPhone as Phone,
+	LuMapPin as MapPin,
+	LuShoppingCart as ShoppingCart,
+	LuCamera as Camera,
+	LuVideo as Video,
+	LuMusic as Music,
+	LuBookOpen as BookOpen,
+	LuNewspaper as Newspaper,
+	LuGraduationCap as GraduationCap,
+	LuBriefcase as Briefcase,
+	LuHeart as Heart,
+	LuStar as Star,
+	LuFlame as Flame,
+	LuSparkles as Sparkles,
+	LuMessageCircle as MessageCircle,
+	LuFileText as FileText,
+	LuCalendar as Calendar,
+	LuInstagram as Instagram,
+	LuYoutube as Youtube,
+} from 'react-icons/lu'
 import {
-	Instagram,
-	Facebook,
-	Twitter,
-	Linkedin,
-	Youtube,
-	Github,
-	MessageCircle as Discord,
-	Send as Telegram,
-	Music as Spotify
-} from 'lucide-react'
+	FaFacebook as Facebook,
+	FaXTwitter as Twitter,
+	FaLinkedin as Linkedin,
+	FaGithub as Github,
+	FaDiscord as Discord,
+	FaTelegram as Telegram,
+	FaSpotify as Spotify,
+	FaTwitch as Twitch
+} from 'react-icons/fa6'
 
 interface LinkPageRendererProps {
 	linkPage: LinkPage
 }
 
-const ICON_MAP = {
+const ICON_MAP: Record<string, React.ElementType> = {
 	'link': LinkIcon,
 	'globe': Globe,
 	'envelope': Mail,
@@ -63,7 +64,7 @@ const ICON_MAP = {
 	'calendar': Calendar
 }
 
-const SOCIAL_ICON_MAP = {
+const SOCIAL_ICON_MAP: Record<string, React.ElementType> = {
 	'instagram': Instagram,
 	'facebook': Facebook,
 	'twitter': Twitter,
@@ -75,7 +76,7 @@ const SOCIAL_ICON_MAP = {
 	'whatsapp': Phone,
 	'telegram': Telegram,
 	'spotify': Spotify,
-	'twitch': Video
+	'twitch': Twitch
 }
 
 export function LinkPageRenderer({ linkPage }: LinkPageRendererProps) {

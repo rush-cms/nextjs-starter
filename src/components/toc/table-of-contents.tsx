@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useRef } from 'react'
-import { ChevronDown, ChevronUp } from 'lucide-react'
+import { LuChevronDown, LuChevronUp } from 'react-icons/lu'
 
 export interface TocHeading {
 	id: string
@@ -75,7 +75,6 @@ export function TableOfContents({ headings, className = '' }: TableOfContentsPro
 
 	return (
 		<nav className={`toc ${className}`} aria-label='Table of contents'>
-			{/* Mobile Toggle */}
 			<button
 				onClick={() => setIsOpen(!isOpen)}
 				className='lg:hidden w-full flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 mb-4'
@@ -83,17 +82,15 @@ export function TableOfContents({ headings, className = '' }: TableOfContentsPro
 			>
 				<span className='font-semibold text-gray-900'>Table of Contents</span>
 				{isOpen ? (
-					<ChevronUp className='w-5 h-5 text-gray-600' />
+					<LuChevronUp className='w-5 h-5 text-gray-600' />
 				) : (
-					<ChevronDown className='w-5 h-5 text-gray-600' />
+					<LuChevronDown className='w-5 h-5 text-gray-600' />
 				)}
 			</button>
 
-			{/* Desktop: Always visible, Mobile: Collapsible */}
 			<div
-				className={`${
-					isOpen ? 'block' : 'hidden'
-				} lg:block lg:sticky lg:top-24 space-y-1`}
+				className={`${isOpen ? 'block' : 'hidden'
+					} lg:block lg:sticky lg:top-24 space-y-1`}
 			>
 				<div className='lg:p-4 lg:bg-gray-50 lg:rounded-lg lg:border lg:border-gray-200'>
 					<h2 className='hidden lg:block text-sm font-semibold text-gray-900 mb-3 uppercase tracking-wide'>
@@ -109,11 +106,10 @@ export function TableOfContents({ headings, className = '' }: TableOfContentsPro
 									<a
 										href={`#${heading.id}`}
 										onClick={(e) => handleClick(e, heading.id)}
-										className={`block py-1 transition-colors ${
-											isActive
-												? 'text-blue-600 font-medium'
-												: 'text-gray-600 hover:text-gray-900'
-										}`}
+										className={`block py-1 transition-colors ${isActive
+											? 'text-blue-600 font-medium'
+											: 'text-gray-600 hover:text-gray-900'
+											}`}
 										aria-current={isActive ? 'true' : undefined}
 									>
 										{heading.text}

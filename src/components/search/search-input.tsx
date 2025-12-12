@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Search, X } from 'lucide-react'
+import { LuSearch, LuX } from 'react-icons/lu'
 
 interface SearchInputProps {
 	value: string
@@ -41,7 +41,7 @@ export function SearchInput({
 		<div className='relative w-full'>
 			<div className='relative'>
 				<div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none'>
-					<Search className='w-5 h-5 text-gray-400' />
+					<LuSearch className='w-5 h-5 text-gray-400' />
 				</div>
 				<input
 					type='text'
@@ -57,7 +57,7 @@ export function SearchInput({
 						className='absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600 transition-colors'
 						aria-label='Clear search'
 					>
-						<X className='w-5 h-5' />
+						<LuX className='w-5 h-5' />
 					</button>
 				)}
 			</div>

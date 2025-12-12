@@ -1,6 +1,6 @@
 'use client'
 
-import { AlertCircle } from 'lucide-react'
+import { LuCircleAlert } from 'react-icons/lu'
 
 interface SearchResultsProps {
 	query: string
@@ -25,7 +25,7 @@ export function SearchResults({ query, totalResults, children }: SearchResultsPr
 						</>
 					) : (
 						<span className='flex items-center gap-2 text-gray-600'>
-							<AlertCircle className='w-4 h-4' />
+							<LuCircleAlert className='w-4 h-4' />
 							No results found for{' '}
 							<span className='font-semibold text-gray-900'>&quot;{query}&quot;</span>
 						</span>
