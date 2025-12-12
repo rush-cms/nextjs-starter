@@ -2,22 +2,22 @@ import Link from 'next/link'
 import Image from 'next/image'
 import type { RushCMSEntry, BlockData } from '@/types/rush-cms'
 import { formatDate } from '@/lib/date'
-import { ArticleSchema, BreadcrumbSchema } from '@/components/structured-data/entry-schema'
+import { ArticleSchema } from '@/components/structured-data/entry-schema'
 import { ShareButtons } from '@/components/share/share-buttons'
-import { Breadcrumbs } from '@/components/breadcrumbs/breadcrumbs'
+
 import { BlockRenderer } from '@/components/blocks/block-renderer'
 import { config } from '@/lib/config'
 
 interface ArticleProps {
 	entry: RushCMSEntry<Record<string, unknown>>
 	showStructuredData?: boolean
-	showBreadcrumbs?: boolean
-	showToc?: boolean
+
+
 	basePath?: string
 }
 
-export function Article({ entry, showStructuredData = true, showBreadcrumbs = true, showToc = true, basePath = '/blog' }: ArticleProps) {
-	const { data, published_at, updated_at, title, excerpt, author, featured_image } = entry
+export function Article({ entry, showStructuredData = true, basePath = '/blog' }: ArticleProps) {
+	const { data, published_at, updated_at, title, excerpt, featured_image } = entry
 	const categories = data.categories as string[] | undefined
 	const tags = data.tags as string[] | undefined
 	const content = data.content as BlockData[] | undefined
@@ -35,24 +35,11 @@ export function Article({ entry, showStructuredData = true, showBreadcrumbs = tr
 						getImageFn={() => undefined}
 						getAuthorFn={() => entry.author?.name}
 					/>
-					<BreadcrumbSchema
-						items={[
-							{ name: 'Home', url: config.site.url },
-							{ name: basePath.replace('/', '').charAt(0).toUpperCase() + basePath.slice(2), url: `${config.site.url}${basePath}` },
-							{ name: title, url: `${config.site.url}${basePath}/${entry.slug}` }
-						]}
-					/>
+
 				</>
 			)}
 			<article className='w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12'>
-				{showBreadcrumbs && (
-					<Breadcrumbs
-						items={[
-							{ label: basePath.replace('/', '').charAt(0).toUpperCase() + basePath.slice(2), href: basePath },
-							{ label: title }
-						]}
-					/>
-				)}
+
 
 				{categories && categories.length > 0 && (
 					<div className='mb-3 sm:mb-4'>

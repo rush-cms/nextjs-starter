@@ -8,7 +8,7 @@ import { Article } from '@/components/rush/article'
 import { config } from '@/lib/config'
 import { generateEntryMetadata, generatePageMetadata } from '@/lib/metadata'
 import { BlogListing } from '@/components/blog/blog-listing'
-import { Breadcrumbs } from '@/components/breadcrumbs/breadcrumbs'
+
 import type { BlogEntryData, RushCMSCollection } from '@/types/rush-cms'
 import type { Metadata } from 'next'
 
@@ -118,7 +118,7 @@ export default async function DynamicPage({ params }: DynamicPageProps) {
 
 		return (
 			<div className='w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16'>
-				<Breadcrumbs items={[{ label: collectionName }]} />
+
 
 				<div className='mb-8 sm:mb-12'>
 					<h1 className='text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 sm:mb-4'>
