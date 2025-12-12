@@ -11,8 +11,6 @@ import { config } from '@/lib/config'
 interface ArticleProps {
 	entry: RushCMSEntry<Record<string, unknown>>
 	showStructuredData?: boolean
-
-
 	basePath?: string
 }
 
@@ -39,8 +37,6 @@ export function Article({ entry, showStructuredData = true, basePath = '/blog' }
 				</>
 			)}
 			<article className='w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12'>
-
-
 				{categories && categories.length > 0 && (
 					<div className='mb-3 sm:mb-4'>
 						{categories.map((category, index) => {
@@ -82,7 +78,6 @@ export function Article({ entry, showStructuredData = true, basePath = '/blog' }
 						)}
 					</div>
 				)}
-
 
 				{excerpt && (
 					<p className='text-base sm:text-lg text-gray-700 italic mb-6 sm:mb-8'>

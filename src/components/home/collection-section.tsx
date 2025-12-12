@@ -7,6 +7,7 @@ interface CollectionSectionProps {
 	collection: RushCMSCollection
 	entries: RushCMSEntry[]
 	maxEntries?: number
+	enableImagePriority?: boolean
 }
 
 const collectionIcons: Record<string, string> = {
@@ -30,7 +31,7 @@ function getCollectionIcon(slug: string): string {
 	return collectionIcons[slug.toLowerCase()] || collectionIcons.default
 }
 
-export function CollectionSection({ collection, entries, maxEntries = 3 }: CollectionSectionProps) {
+export function CollectionSection({ collection, entries, maxEntries = 3, enableImagePriority = false }: CollectionSectionProps) {
 	const displayEntries = entries.slice(0, maxEntries)
 
 	if (displayEntries.length === 0) {
@@ -64,7 +65,7 @@ export function CollectionSection({ collection, entries, maxEntries = 3 }: Colle
 						formatDate={formatDate}
 						headingLevel='h3'
 						imageHeight='h-48'
-						priority={index < 3}
+						priority={enableImagePriority && index < 3}
 						basePath={`/${collection.slug}`}
 					/>
 				))}

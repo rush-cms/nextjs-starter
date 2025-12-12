@@ -1,11 +1,10 @@
-'use client'
-
 import Link from 'next/link'
-import { useSite } from '@/lib/site-context'
 
-export function HomeHero() {
-	const { name: siteName } = useSite()
+interface HomeHeroProps {
+	siteName: string
+}
 
+export function HomeHero({ siteName }: HomeHeroProps) {
 	return (
 		<section className='bg-gradient-to-br from-blue-600 to-blue-800 text-white'>
 			<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32'>

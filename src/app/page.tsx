@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { getCollections, getEntriesByCollection } from '@/lib/rush-cms'
+import { getCollections, getEntriesByCollection, getTeams } from '@/lib/rush-cms'
 import { config } from '@/lib/config'
 import { HomeHero } from '@/components/home-hero'
 import { CollectionSection } from '@/components/home/collection-section'
@@ -10,6 +10,18 @@ export default async function HomePage() {
 		collection: Awaited<ReturnType<typeof getCollections>>[0]
 		entries: Awaited<ReturnType<typeof getEntriesByCollection<BlogEntryData>>>
 	}> = []
+	let siteName = config.site.name
+
+	try {
+		const teams = await getTeams()
+		const currentTeam = teams.find(team => team.slug === config.site.slug)
+
+		if (currentTeam) {
+			siteName = currentTeam.name
+		}
+	} catch (error) {
+		console.error('Failed to fetch team info', { error })
+	}
 
 	try {
 		const collections = await getCollections(config.site.slug)
@@ -35,14 +47,15 @@ export default async function HomePage() {
 
 	return (
 		<div className='w-full'>
-			<HomeHero />
+			<HomeHero siteName={siteName} />
 
-			{collectionsWithEntries.map(({ collection, entries }) => (
+			{collectionsWithEntries.map(({ collection, entries }, index) => (
 				<CollectionSection
 					key={collection.id}
 					collection={collection}
 					entries={entries}
 					maxEntries={3}
+					enableImagePriority={index === 0}
 				/>
 			))}
 
