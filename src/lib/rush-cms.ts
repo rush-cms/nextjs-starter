@@ -5,6 +5,7 @@ import type {
 	RushCMSCollection,
 	RushCMSNavigation,
 	RushCMSNavigationItem,
+	RushCMSNavigationItemRaw,
 	RushCMSForm,
 	RushCMSSite,
 	RushCMSTag,
@@ -197,7 +198,7 @@ export async function getEntryBySlug<T = Record<string, unknown>>(
 	}
 }
 
-function mapNavigationItems(items: any[]): RushCMSNavigationItem[] {
+function mapNavigationItems(items: RushCMSNavigationItemRaw[]): RushCMSNavigationItem[] {
 	return items.map(item => ({
 		id: parseInt(item.id),
 		parent_id: item.parent_id ? parseInt(item.parent_id) : null,

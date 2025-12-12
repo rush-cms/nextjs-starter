@@ -281,3 +281,13 @@ export interface BlogEntryData extends Record<string, unknown> {
 
 export type BlogEntry = RushCMSEntry<BlogEntryData>
 export type AnyEntry = RushCMSEntry<Record<string, unknown>>
+
+export interface RushCMSNavigationItemRaw {
+	id: string | number
+	parent_id?: string | number | null
+	title: string
+	url?: string
+	target: '_self' | '_blank'
+	order?: number
+	children?: RushCMSNavigationItemRaw[]
+}

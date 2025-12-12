@@ -10,7 +10,7 @@
 7. **NO** trailing commas in objects/arrays
 8. Tailwind classes **ONLY**, no custom CSS unless absolutely necessary
 9. **STRICT TYPE!** I want a strong typing code
-10. **NEVER** create solo .md files in root, use only  `./.claude` or  `./docs folder`
+10. **NEVER** create solo .md files in root (only `README.md`, `CONTRIBUTING.md`, `CODE_GUIDELINES.md`), use only  `./.ia` or  `./docs folder`
 11. **MODERN** approach, bring insights if you feel necessary
 12. Check package.json ßto see current packages versions
 13. Commits are **ALWAYS** atomic and lowercase
@@ -31,6 +31,11 @@ const config = {
     version: "1.0.0", // No trailing comma
 };
 ```
+
+## EXCEPTIONS TO CODING STANDARDS:
+- **`src/components/ui/*`** - These are shadcn/ui importable modules, DO NOT edit them
+  - May use double quotes, different formatting
+  - Keep them as imported from shadcn/ui
 
 # PROJECT MANAGEMENT
 
