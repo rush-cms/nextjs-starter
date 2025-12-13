@@ -1,7 +1,7 @@
 # CODE GUIDELINES
 
 ## MANDATORY CODING STANDARDS - NEVER VIOLATE THESE:
-1. **ALWAYS** use single quotes (') never double quotes
+1. **ALWAYS** use single quotes (') never double quotes. Exceptions: `src/components/ui/*`, `.json` and `.css` files
 2. **ALWAYS** write everything in **ENGLISH**
 3. **NEVER** add semicolons at the end of lines
 4. **ALL** files must be kebab-case (`tech-detector.tsx`, not `TechDetector.tsx`)
@@ -20,14 +20,14 @@
 // ✅ CORRECT
 const message = 'Hello World'
 const config = {
-	name: 'TechRadar',
+	name: 'NextStarter',
 	version: '1.0.0'
 }
 
 // ❌ WRONG
 const message = "Hello World";  // Never use double quotes or semicolons
 const config = {
-    name: "TechRadar",  // Wrong: spaces instead of tabs
+    name: "NextStarter",  // Wrong: spaces instead of tabs
     version: "1.0.0", // No trailing comma
 };
 ```
@@ -40,16 +40,20 @@ const config = {
 # PROJECT MANAGEMENT
 
 ## Organization Structure
-Use `.claude/` directory (gitignored):
+Use `.ai/` directory:
 
 ```
-.claude/
+.ai/
 ├── current-sprint.md    # Active sprint only
 ├── backlog.md           # Future tasks and ideas
-├── completed/           # Archived sprints by date (YYYY-MM-DD.md)
-├── notes.md             # Quick thoughts, blockers, ideas
 ├── context.md           # State between sessions
-└── decisions.md         # Architectural decisions
+├── reports/             # Future tasks and ideas (files in date-file format)
+├── notes/               # Quick thoughts, blockers, ideas (files in date-file format)
+├── completed/           # Archived sprints (files in date-file format)
+├── docs/                # Documentation about project (files in date-file format)
+└── decisions/           # Architectural decisions (files in date-file format)
+
+# Default date-file format: YYYY-MM-DD-{title}.md
 ```
 
 ## Sprint Management
@@ -203,12 +207,12 @@ Task complete when ALL checked:
 ### Before Clearing Context
 **ALWAYS update these files**:
 
-1. **`.claude/current-sprint.md`**
+1. **`.ai/current-sprint.md`**
 - Mark completed tasks `[x]`
 - Add new tasks discovered
 - Update time spent
 
-2. **`.claude/context.md`**
+2. **`.ai/context.md`**
 ```markdown
 ## Last Updated: [timestamp]
 
@@ -292,15 +296,40 @@ Start new session with: "Follow session start protocol and continue development"
 - Description of potential feature
 ```
 
-## Pre-Deployment Checklist
+## 🚀 Verification Protocol
 
-- [ ] All critical security issues fixed
-- [ ] All high-priority performance issues fixed
-- [ ] Code formatted: `vendor/bin/pint`
-- [ ] All tests passing: `php artisan test`
-- [ ] No N+1 queries (Telescope)
-- [ ] Response time < 200ms (Telescope)
-- [ ] Frontend builds: `npm run build`
-- [ ] No console errors in browser
-- [ ] Sprint documented
-- [ ] Git commits pushed
+Before declaring a task complete or deploying, YOU MUST RUN:
+
+### 1. Code Quality & Safety
+- [ ] **Type Check**: `pnpm type-check` (Must pass with 0 errors)
+- [ ] **Linting**: `pnpm lint` (Must pass with 0 warnings)
+- [ ] **Security Audit**: `pnpm audit` (Report critical vulnerabilities)
+
+### 2. Build Verification
+- [ ] **Production Build**: `pnpm build` (Must succeed)
+- [ ] **Console check**: Verify no console errors in browser terminal (if applicable)
+
+### 3. Documentation Update (The "Memory" Phase)
+- [ ] **Update Plan**: Mark completed steps in `task.md` or `.ai/current-sprint.md`
+- [ ] **Log Changes**: Update `.ai/context.md` with new architectural details
+- [ ] **Generate Report**: Create a walkthrough artifact or entry in `.ai/reports/` if the task was significant
+
+### 4. Git Hygiene
+- [ ] **Atomic Commits**: Ensure commit messages follow `conventional-commits` (feat: , fix: , chore: )
+- [ ] **Clean State**: Ensure no temp files or debug logs are left in the tree (`git status` should be clean)
+
+## 🗺️ Codebase Map
+- **Content Blocks**: `src/components/blocks/*` (RushCMS Renderer)
+- **API Client**: `src/lib/rush-cms-sdk.ts` (Do not use old `rush-cms.ts`)
+- **Pages**: `src/app/[collectionSlug]/*` (Dynamic routing strategy)
+- **Types**: `@rushcms/types` (External SDK dependency)
+
+## ⛔ Strict Constraints
+- **NO** functional components without `export function Name() {}` (No arrow functions for components)
+- **NO** direct API calls in components (Use `src/lib/` wrappers)
+- **NO** usage of `any` type (Strict TypeScript)
+- **NO** shadcn/ui generic installs (Use custom design system unless specified)
+
+## ⚡ Agent Shortcuts
+- **Refactor Mode**: When refactoring, always create a `REFACTORING_PLAN.md` in `.ai/notes/` first.
+- **Bug Fix Mode**: Reproduce -> Fix -> Verify -> Test Case.
