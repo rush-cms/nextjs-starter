@@ -13,13 +13,18 @@ interface BlogPostPageProps {
 }
 
 export async function generateStaticParams() {
-	const entries = await getEntriesByCollection(config.site.slug, 'blog', {
-		status: 'published'
-	})
+	try {
+		const entries = await getEntriesByCollection(config.site.slug, 'blog', {
+			status: 'published'
+		})
 
-	return entries.map((entry) => ({
-		slug: entry.slug
-	}))
+		return entries.map((entry) => ({
+			slug: entry.slug
+		}))
+	} catch (error) {
+		console.error('Failed to generate static params for blog posts:', error)
+		return []
+	}
 }
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {

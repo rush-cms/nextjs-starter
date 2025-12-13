@@ -3,7 +3,7 @@ import { config } from '@/lib/config'
 import { generatePageMetadata } from '@/lib/metadata'
 import { BlogListing } from '@/components/blog/blog-listing'
 
-import type { BlogEntryData } from '@/types/rush-cms'
+import type { BlogEntryData, RushCMSEntry } from '@/types/rush-cms'
 import type { Metadata } from 'next'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -18,9 +18,17 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function BlogPage() {
-	const entries = await getEntriesByCollection<BlogEntryData>(config.site.slug, 'blog', {
-		status: 'published'
-	})
+	let entries: RushCMSEntry<BlogEntryData>[] = []
+
+	try {
+		const result = await getEntriesByCollection<BlogEntryData>(config.site.slug, 'blog', {
+			status: 'published'
+		})
+		entries = Array.isArray(result) ? result : []
+	} catch (error) {
+		console.error('Failed to fetch blog entries:', error)
+		entries = []
+	}
 
 	return (
 		<div className='w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16'>
