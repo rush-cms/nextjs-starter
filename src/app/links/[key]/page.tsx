@@ -37,12 +37,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function LinkPagePage({ params }: PageProps) {
 	const { key } = await params
 
-	try {
-		const linkPage = await getLinkPage(config.site.slug, key)
+	let linkPage
 
-		return <LinkPageRenderer linkPage={linkPage} />
+	try {
+		linkPage = await getLinkPage(config.site.slug, key)
 	} catch (error) {
 		logger.error('Failed to fetch linkpage', { key, error })
 		notFound()
 	}
+
+	return <LinkPageRenderer linkPage={linkPage} />
 }

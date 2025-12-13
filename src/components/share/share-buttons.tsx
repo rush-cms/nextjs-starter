@@ -23,7 +23,11 @@ export function ShareButtons({
 	const [hasNativeShare, setHasNativeShare] = useState(false)
 
 	useEffect(() => {
-		setHasNativeShare(typeof navigator !== 'undefined' && typeof navigator.share !== 'undefined')
+		// Use setTimeout to avoid synchronous state update warning
+		const timer = setTimeout(() => {
+			setHasNativeShare(typeof navigator !== 'undefined' && typeof navigator.share !== 'undefined')
+		}, 0)
+		return () => clearTimeout(timer)
 	}, [])
 
 	const encodedUrl = encodeURIComponent(url)

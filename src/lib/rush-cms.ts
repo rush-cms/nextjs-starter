@@ -200,8 +200,8 @@ export async function getEntryBySlug<T = Record<string, unknown>>(
 
 function mapNavigationItems(items: RushCMSNavigationItemRaw[]): RushCMSNavigationItem[] {
 	return items.map(item => ({
-		id: parseInt(item.id),
-		parent_id: item.parent_id ? parseInt(item.parent_id) : null,
+		id: parseInt(String(item.id)),
+		parent_id: item.parent_id ? parseInt(String(item.parent_id)) : null,
 		title: item.title,
 		url: item.url || '#',
 		target: item.target,

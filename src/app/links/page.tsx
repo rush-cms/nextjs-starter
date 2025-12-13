@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { notFound, redirect } from 'next/navigation'
+import { notFound } from 'next/navigation'
 import { getLinkPage } from '@/lib/rush-cms'
 import { LinkPageRenderer } from '@/components/link-page/link-page-renderer'
 import { config } from '@/lib/config'
@@ -38,12 +38,14 @@ export default async function LinksPage() {
 		notFound()
 	}
 
-	try {
-		const linkPage = await getLinkPage(config.site.slug, config.linkPages.default)
+	let linkPage
 
-		return <LinkPageRenderer linkPage={linkPage} />
+	try {
+		linkPage = await getLinkPage(config.site.slug, config.linkPages.default)
 	} catch (error) {
 		logger.error('Failed to fetch default linkpage', { error })
 		notFound()
 	}
+
+	return <LinkPageRenderer linkPage={linkPage} />
 }

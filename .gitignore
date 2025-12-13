@@ -39,8 +39,3 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-# Personal agents
-.claude/*
-!.claude/docs/
-!.claude/README.md

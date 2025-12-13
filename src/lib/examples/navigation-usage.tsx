@@ -1,4 +1,4 @@
-import type { RushCMSNavigationItem } from '@/types/rush-cms'
+import type { NavigationItem } from '@rushcms/types'
 /**
  * Navigation API - Usage Examples
  *
@@ -65,11 +65,11 @@ export function NavigationSelector() {
  * Example 3: Recursive navigation item renderer
  * Handles navigation items with their pre-computed URLs
  */
-function NavigationItem({ item }: { item: RushCMSNavigationItem }) {
+function NavigationItem({ item }: { item: NavigationItem }) {
 	return (
 		<div>
 			<Link
-				href={item.url}
+				href={item.url || '#'}
 				target={item.target || '_self'}
 				className='hover:underline'
 			>
@@ -78,7 +78,7 @@ function NavigationItem({ item }: { item: RushCMSNavigationItem }) {
 
 			{item.children && item.children.length > 0 && (
 				<div className='ml-4 mt-2'>
-					{item.children.map((child: RushCMSNavigationItem) => (
+					{item.children.map((child: NavigationItem) => (
 						<NavigationItem key={child.id} item={child} />
 					))}
 				</div>
