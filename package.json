@@ -32,7 +32,8 @@
     "test:coverage": "vitest --coverage",
     "test:ci": "vitest run --coverage",
     "test:api": "tsx scripts/test-api.ts",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "sdk:update": "pnpm update @rushcms/client @rushcms/react @rushcms/types --latest"
   },
   "dependencies": {
     "@radix-ui/react-label": "^2.1.8",
